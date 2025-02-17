@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     //TODO: to build based on screensize:  <1200 tablet >1200 desktop
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ComforTex AI',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
