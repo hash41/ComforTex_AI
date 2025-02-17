@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_widgets/TopBar.dart';
-import 'app_widgets/mid_widget.dart';
+import 'app_widgets/center_widget.dart';
 
 class DesktopScreen1 extends StatefulWidget {
   const DesktopScreen1({super.key});
@@ -21,7 +21,7 @@ class _DesktopScreen1State extends State<DesktopScreen1> {
             _createContainerDecoration(
                 padding: MediaQuery.of(context).size.height * 0.03,
                 height: MediaQuery.of(context).size.height * 0.4,
-                child: MidWidget()),
+                child: CenterWidget()),
             _createContainerDecoration(
               padding: MediaQuery.of(context).size.height * 0.03,
               height: MediaQuery.of(context).size.height * 0.35,

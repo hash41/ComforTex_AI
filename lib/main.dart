@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:test1/layout/desktop_screen_1.dart';
-import 'package:test1/layout/mobile_screen_1.dart';
+import 'package:comfortex_ai/layout/desktop_screen_1.dart';
+import 'package:comfortex_ai/layout/mobile_screen_1.dart';
 
 void main() {
   runApp(const MyApp());
