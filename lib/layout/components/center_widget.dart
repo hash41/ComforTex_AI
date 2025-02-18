@@ -99,17 +99,20 @@ class _CenterWidgetState extends State<CenterWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(children: [
-                Image.asset(width: 48, height: 48, 'icons/Shirt_2.png'),
+                Flexible(
+                    fit: FlexFit.loose,
+                    child: Image.asset(width: 48, height: 48, 'icons/Shirt_2.png')),
                 SizedBox(
-                  width: 24,
-                  height: 24,
+                  width: 24.0,
+                  height: 24.0,
                 ),
                 Flexible(
                   fit: FlexFit.loose,
                   child: AutoSizeText(
                     "Garment Type",
-                    style: TextStyle(fontSize: 24, color: Colors.blue),
+                    style: TextStyle(fontSize: 24.0, color: Colors.blue),
                     maxLines: 2,
+
                   ),
                 ),
               ]),
