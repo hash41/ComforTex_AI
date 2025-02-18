@@ -39,14 +39,14 @@ class _CenterWidgetState extends State<CenterWidget> {
 
   ///method to take the page 1 step forward by calling _goToPage in PageView
   void _nextPage() {
-    if (_currentPage < _textiles.length ~/ 8) {
+    if (_currentPage < _textiles.length~/8 - 1) {
       _goToPage(_currentPage + 1);
     }
   }
 
   ///Prepares the Textiles to be inserted in actual page of PageView
   List<Widget> getTextiles(int page) {
-    int imgIndex = page * 4;
+    int imgIndex = page * 8;
     return _loadTextiles(
       _textiles[imgIndex],
       _textiles[imgIndex + 1],
