@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+
+///The top part of the screen refactored here to implement in different sizes
+///among desktop and mobile screens.
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
 

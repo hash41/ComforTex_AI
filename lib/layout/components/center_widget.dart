@@ -2,21 +2,26 @@ import 'package:flutter/material.dart';
 import '../../utils/file_listing.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-class MidWidget extends StatefulWidget {
-  const MidWidget({super.key});
+///CenterWidget is a desktop specific widget displayed among the widgets in
+///"desktop_screen_1.dart".
+class CenterWidget extends StatefulWidget {
+  const CenterWidget({super.key});
 
   @override
-  State<MidWidget> createState() => _MidWidgetState();
+  State<CenterWidget> createState() => _CenterWidgetState();
 }
 
+///ShirtType to help us better clarify with the selection later.
 enum ShirtType { polo, tShirt }
 
-class _MidWidgetState extends State<MidWidget> {
+class _CenterWidgetState extends State<CenterWidget> {
   String? _type;
   final PageController _pageController = PageController(initialPage: 0);
   List<String> _textiles = [];
   int _currentPage = 0;
 
+  ///Method _goToPage takes @index to instruct the _pageController to go to the
+  ///previous page in PageView.
   void _goToPage(int index) {
     _pageController.animateToPage(index,
         duration: Duration(milliseconds: 10), curve: Curves.fastOutSlowIn);
@@ -25,31 +30,37 @@ class _MidWidgetState extends State<MidWidget> {
     });
   }
 
+  ///method to take the page 1 step backward by calling _goToPage in PageView.
   void _previousPage() {
     if (_currentPage > 0) {
       _goToPage(_currentPage - 1);
     }
   }
 
+  ///method to take the page 1 step forward by calling _goToPage in PageView
   void _nextPage() {
     if (_currentPage < _textiles.length ~/ 8) {
       _goToPage(_currentPage + 1);
     }
   }
 
+  ///Prepares the Textiles to be inserted in actual page of PageView
   List<Widget> getTextiles(int page) {
     int imgIndex = page * 4;
     return _loadTextiles(
-        _textiles[imgIndex],
-        _textiles[imgIndex + 1],
-        _textiles[imgIndex + 2],
-        _textiles[imgIndex + 3],
-        _textiles[imgIndex],
-        _textiles[imgIndex + 1],
-        _textiles[imgIndex + 2],
-        _textiles[imgIndex + 3]);
+      _textiles[imgIndex],
+      _textiles[imgIndex + 1],
+      _textiles[imgIndex + 2],
+      _textiles[imgIndex + 3],
+      _textiles[imgIndex + 4],
+      _textiles[imgIndex + 5],
+      _textiles[imgIndex + 6],
+      _textiles[imgIndex + 7],
+    );
   }
 
+  ///A method [getAssets] to get the images found in 'assets/textile/' and then
+  ///setState and thus updating screen.
   void getAssets() async {
     List<String> t = await listAssets('assets/textile/');
     setState(() {
@@ -63,6 +74,9 @@ class _MidWidgetState extends State<MidWidget> {
     super.initState();
   }
 
+
+  ///[changeBackGround] is easily used in setState and thus
+  ///to animate the container [imgContainer].
   void changeBackGround(ShirtType newType) {
     switch (newType) {
       case ShirtType.polo:
@@ -151,7 +165,9 @@ class _MidWidgetState extends State<MidWidget> {
             children: [
               Row(
                 children: [
-                  SizedBox(width: 48.0,),
+                  SizedBox(
+                    width: 48.0,
+                  ),
                   Image.asset(height: 24.0, width: 24.0, 'icons/19.png'),
                   Text(
                     "Material",
@@ -221,6 +237,8 @@ class _MidWidgetState extends State<MidWidget> {
   }
 }
 
+/// A decoratedContainer to make the identification easier of selectedImage from
+/// [polo,tShirt].
 class ImgContainer extends StatelessWidget {
   final bool selected;
   final Widget child;
@@ -230,7 +248,7 @@ class ImgContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 600),
+      duration: Duration(milliseconds: 500),
       decoration: BoxDecoration(
         border:
             selected ? Border.all(width: 4.0, color: Colors.lightBlue) : null,
@@ -241,52 +259,51 @@ class ImgContainer extends StatelessWidget {
   }
 }
 
-///try
-
+///Locks 4 Items inside the [PageView].
+///Its result is returned to used in [getTextiles] method.
 List<Widget> _loadTextiles(
-    String imageName,
-    String image2Name,
-    String image3Name,
-    String image4Name,
-    String image5Name,
-    String image6Name,
-    String image7Name,
-    String image8Name) {
+    String img,
+    String img2,
+    String img3,
+    String img4,
+    String img5,
+    String img6,
+    String img7,
+    String img8) {
   return [
     Expanded(
       child: Row(
         children: [
           Expanded(
             child: Item(
-              imageName: imageName,
-              imageName2: image2Name,
+              img: img,
+              img2: img2,
             ),
           ),
           SizedBox(width: 36.0),
           Expanded(
             child: Item(
-              imageName: image3Name,
-              imageName2: image4Name,
+              img: img3,
+              img2: img4,
             ),
           ),
         ],
       ),
-
     ),
     Expanded(
       child: Row(
         children: [
           Expanded(
             child: Item(
-              imageName: image5Name,
-              imageName2: image6Name,
+              img: img5,
+              img2: img6,
             ),
           ),
           SizedBox(width: 36.0),
           Expanded(
             child: Item(
-              imageName: image7Name,
-              imageName2: image8Name,
+              img: img7,
+              img2: img8,
             ),
           ),
         ],
@@ -295,15 +312,15 @@ List<Widget> _loadTextiles(
   ];
 }
 
-///Item inside a MaterialType widget.
+///Item inside a PageView widget, I have 4 of these to start inside each PageView.
 ///Contains 2 assets and a text under them.
 
 class Item extends StatelessWidget {
-  final String imageName;
-  final String imageName2;
+  final String img;
+  final String img2;
 
   //TODO description
-  const Item({super.key, required this.imageName, required this.imageName2});
+  const Item({super.key, required this.img, required this.img2});
 
   @override
   Widget build(BuildContext context) {
@@ -316,17 +333,16 @@ class Item extends StatelessWidget {
               Expanded(
                 child: Image.asset(
                   fit: BoxFit.fill,
-                  'textile/$imageName',
+                  'textile/$img',
                 ),
               ),
               SizedBox(
                 width: 12,
               ),
               Expanded(
-
                 child: Image.asset(
                   fit: BoxFit.fill,
-                  'textile/$imageName2',
+                  'textile/$img2',
                 ),
               ),
             ],
@@ -338,7 +354,9 @@ class Item extends StatelessWidget {
           maxLines: 2,
           minFontSize: 10,
         ),
-        SizedBox(height: 6,)
+        SizedBox(
+          height: 6,
+        )
       ],
     );
   }

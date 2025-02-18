@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'components/top_bar.dart';
+import 'components/center_widget.dart';
 
-import 'app_widgets/top_bar.dart';
-import 'app_widgets/center_widget.dart';
 
+///DesktopScreen1 that gives us a display of the desktop widgets for screen 1.
 class DesktopScreen1 extends StatefulWidget {
   const DesktopScreen1({super.key});
 
@@ -10,10 +11,10 @@ class DesktopScreen1 extends StatefulWidget {
   State<DesktopScreen1> createState() => _DesktopScreen1State();
 }
 
+/// the good state of the stateful widget of yours.
 class _DesktopScreen1State extends State<DesktopScreen1> {
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.height * 0.03);
     return Scaffold(
         appBar: TopBar(MediaQuery.of(context).size.height * 0.124),
         body: Column(
