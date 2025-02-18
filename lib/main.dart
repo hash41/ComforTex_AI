@@ -19,7 +19,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    //TODO: to build based on screenSize:  <1200 tablet >1200 desktop
+    //TODO: to build based on screenSize:  <1200 to tablet >1200 to desktop
     return MaterialApp(
       title: 'ComforTex AI',
       theme: ThemeData(

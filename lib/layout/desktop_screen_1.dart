@@ -22,7 +22,7 @@ class _DesktopScreen1State extends State<DesktopScreen1> {
             _createContainerDecoration(
                 padding: MediaQuery.of(context).size.height * 0.03,
                 height: MediaQuery.of(context).size.height * 0.4,
-                child: CenterWidget()),
+                child: const CenterWidget()),
             _createContainerDecoration(
               padding: MediaQuery.of(context).size.height * 0.03,
               height: MediaQuery.of(context).size.height * 0.35,

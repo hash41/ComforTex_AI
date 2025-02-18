@@ -24,7 +24,7 @@ class _CenterWidgetState extends State<CenterWidget> {
   ///previous page in PageView.
   void _goToPage(int index) {
     _pageController.animateToPage(index,
-        duration: Duration(milliseconds: 10), curve: Curves.fastOutSlowIn);
+        duration: const Duration(milliseconds: 10), curve: Curves.fastOutSlowIn);
     setState(() {
       _currentPage = index;
     });
@@ -102,11 +102,11 @@ class _CenterWidgetState extends State<CenterWidget> {
                 Flexible(
                     fit: FlexFit.loose,
                     child: Image.asset(width: 48, height: 48, 'icons/Shirt_2.png')),
-                SizedBox(
+                const SizedBox(
                   width: 24.0,
                   height: 24.0,
                 ),
-                Flexible(
+                const Flexible(
                   fit: FlexFit.loose,
                   child: AutoSizeText(
                     "Garment Type",
@@ -168,11 +168,11 @@ class _CenterWidgetState extends State<CenterWidget> {
             children: [
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 48.0,
                   ),
                   Image.asset(height: 24.0, width: 24.0, 'icons/19.png'),
-                  Text(
+                  const Text(
                     "Material",
                     style: TextStyle(fontSize: 24.0),
                   ),
@@ -251,7 +251,7 @@ class ImgContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       decoration: BoxDecoration(
         border:
             selected ? Border.all(width: 4.0, color: Colors.lightBlue) : null,
@@ -283,7 +283,7 @@ List<Widget> _loadTextiles(
               img2: img2,
             ),
           ),
-          SizedBox(width: 36.0),
+          const SizedBox(width: 36.0),
           Expanded(
             child: Item(
               img: img3,
@@ -302,7 +302,7 @@ List<Widget> _loadTextiles(
               img2: img6,
             ),
           ),
-          SizedBox(width: 36.0),
+          const SizedBox(width: 36.0),
           Expanded(
             child: Item(
               img: img7,
@@ -322,7 +322,6 @@ class Item extends StatelessWidget {
   final String img;
   final String img2;
 
-  //TODO description
   const Item({super.key, required this.img, required this.img2});
 
   @override
@@ -339,7 +338,7 @@ class Item extends StatelessWidget {
                   'textile/$img',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
               Expanded(
@@ -351,13 +350,13 @@ class Item extends StatelessWidget {
             ],
           ),
         ),
-        AutoSizeText(
+        const AutoSizeText(
           "Material Type",
           style: TextStyle(fontSize: 14.0),
           maxLines: 2,
           minFontSize: 10,
         ),
-        SizedBox(
+        const SizedBox(
           height: 6,
         )
       ],
