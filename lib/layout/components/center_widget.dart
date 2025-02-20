@@ -121,36 +121,46 @@ class _CenterWidgetState extends State<CenterWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Flexible(
-                      fit: FlexFit.loose,
-                      child: ImgContainer(
-                        selected: _type == ShirtType.polo.name,
+                      fit: FlexFit.tight,
+                      child: Material(
+                        color: Colors.white,
                         child: InkWell(
-                          child: Image.asset(
-                            fit: BoxFit.scaleDown,
-                            'icons/polo.png',
-                          ),
+                          hoverColor: Colors.orange,
+                          hoverDuration: const Duration(milliseconds: 350),
                           onTap: () {
                             setState(() {
                               changeBackGround(ShirtType.polo);
                             });
                           },
+                          child: ImgContainer(
+                            selected: _type == ShirtType.polo.name,
+                            child: Image.asset(
+                              fit: BoxFit.scaleDown,
+                              'icons/polo.png',
+                            ),
+                          ),
                         ),
                       ),
                     ),
                     Flexible(
-                      fit: FlexFit.loose,
-                      child: ImgContainer(
-                        selected: _type == ShirtType.tShirt.name,
+                      fit: FlexFit.tight,
+                      child: Material(
+                        color: Colors.white,
                         child: InkWell(
-                          child: Image.asset(
-                            fit: BoxFit.scaleDown,
-                            'icons/t_shirt.png',
-                          ),
+                          hoverDuration: const Duration(milliseconds: 350),
+                          hoverColor: Colors.orange,
                           onTap: () {
                             setState(() {
                               changeBackGround(ShirtType.tShirt);
                             });
                           },
+                          child: ImgContainer(
+                            selected: _type == ShirtType.tShirt.name,
+                            child: Image.asset(
+                              fit: BoxFit.scaleDown,
+                              'icons/t_shirt.png',
+                            ),
+                          ),
                         ),
                       ),
                     )
@@ -166,22 +176,33 @@ class _CenterWidgetState extends State<CenterWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 48.0,
-                  ),
-                  Image.asset(height: 24.0, width: 24.0, 'icons/19.png'),
-                  const Text(
-                    "Material",
-                    style: TextStyle(fontSize: 24.0),
-                  ),
-                ],
+              Flexible(
+                flex: 1,
+                fit: FlexFit.loose,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 48.0,
+                    ),
+                    Flexible(
+                        fit: FlexFit.loose,
+                        child: Image.asset(height: 24.0, width: 24.0, 'icons/19.png'),),
+                    const SizedBox(
+                      width: 24.0,
+                    ),
+                    const Text(
+                      "Material",
+                      style: TextStyle(fontSize: 24.0, color: Colors.lightBlue,),
+                    ),
+                  ],
+                ),
               ),
-              Expanded(
+              Flexible(
+                flex: 4,
+                fit: FlexFit.tight,
                 child: PageView.builder(
                   controller: _pageController,
-                  itemCount: _textiles.length ~/ 4,
+                  itemCount: _textiles.length ~/ 8,
                   onPageChanged: (index) {
                     setState(() {
                       _currentPage = index;

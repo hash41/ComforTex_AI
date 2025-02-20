@@ -1,3 +1,4 @@
+import 'package:comfortex_ai/layout/components/bottom_widget.dart';
 import 'package:flutter/material.dart';
 import 'components/top_bar.dart';
 import 'components/center_widget.dart';
@@ -26,7 +27,7 @@ class _DesktopScreen1State extends State<DesktopScreen1> {
             _createContainerDecoration(
               padding: MediaQuery.of(context).size.height * 0.03,
               height: MediaQuery.of(context).size.height * 0.35,
-              child: Container(),
+              child: const BottomWidget(),
               //TODO: if card not applicable: replace with Row()
             ),
           ],
