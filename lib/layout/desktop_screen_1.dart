@@ -19,6 +19,7 @@ class _DesktopScreen1State extends State<DesktopScreen1> {
     return Scaffold(
         appBar: TopBar(MediaQuery.of(context).size.height * 0.124),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _createContainerDecoration(
                 padding: MediaQuery.of(context).size.height * 0.03,
@@ -44,7 +45,7 @@ Widget _createContainerDecoration(
     decoration: BoxDecoration(
         border: Border.all(width: 2.0, color: Colors.grey),
         color: Colors.white,
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(24.0),
         )),
     child: child,
