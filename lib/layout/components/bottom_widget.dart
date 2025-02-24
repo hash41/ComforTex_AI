@@ -61,7 +61,7 @@ class _BottomWidgetState extends State<BottomWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
+        Flexible(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +145,7 @@ class _BottomWidgetState extends State<BottomWidget> {
             ],
           ),
         ),
-        Expanded(child: Container(color: Colors.black,),),],
+        Flexible(child: Container(color: Colors.black,),),],
     );
   }
 
@@ -180,22 +180,30 @@ class _BottomWidgetState extends State<BottomWidget> {
     T? groupValue,
       Function(T?)? onChanged,
   ) {
+    int count = 0;
     return Flexible(
       flex: 2,
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           for (T val in values)
             Flexible(
               child: SizedBox(
-                width: 200,
+                width: ++count > 1 ? 140 : 105,
                 child: RadioListTile(
+                  activeColor: Colors.blueAccent,
+                  hoverColor: Colors.orange,
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
                   title: AutoSizeText(
                     val.name,
                     style: const TextStyle(fontSize: 16.0),
+                    minFontSize: 14.0,
+                    overflow: TextOverflow.visible,
+                    maxLines: 2,
                   ),
                   value: val,
                   groupValue: groupValue,
-                  //TODO: setState in the main code
                   onChanged: onChanged
                 ),
               ),

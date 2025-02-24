@@ -1,0 +1,47 @@
+{
+    "fabric 1": {
+        "type": "polo", "composition": "70% PES + 30% CO"
+    },
+    "fabric 2": {
+        "type": "polo", "composition": "60% MAC +38% CO + 2% ANTS"
+    },
+    "fabric 3": {
+        "type": "polo", "composition": "45 % CO+55 % PES"
+    },
+    "fabric 11": {
+        "type": "polo", "composition": "100 % CO"
+    },
+    "fabric 13": {
+        "type": "polo", "composition": "50% CO+50 % rPES"
+    },
+    "fabric 4": {
+        "type": "t-shirt", "composition": "50 % AR+ 50 % CV FR"
+    },
+    "fabric 5": {
+        "type": "t-shirt", "composition": "50% AR + 50% CV FR"
+    },
+    "fabric 6": {
+        "type": "t-shirt", "composition": "50% PES+ 50% CV"
+    },
+    "fabric 7": {
+        "type": "t-shirt", "composition": "100 % PES"
+    },
+    "fabric 8": {
+        "type": "t-shirt", "composition": "86% PES+ 14% EL"
+    },
+    "fabric 9": {
+        "type": "t-shirt", "composition": "56 % CMD+ 40% PA+ 2 % CF+ 2% EL"
+    },
+    "fabric 10": {
+        "type": "t-shirt", "composition": "68% CV FR + 29% AR + 2% EL +1% ANST"
+    },
+    "fabric 12": {
+        "type": "t-shirt", "composition": "50% CO+50 % rPES"
+    },
+    "fabric 14": {
+        "type": "t-shirt", "composition": "100 % PES (graphene print)"
+    },
+    "fabric 15": {
+        "type": "t-shirt", "composition": "80% WO+ 20% PA"
+    }
+}
