@@ -1,98 +1,118 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:comfortex_ai/layout/components/title_widget.dart';
 import 'package:flutter/material.dart';
-
 
 ///The widget on the bottom of the DesktopScreen1.
 class BottomWidget extends StatefulWidget {
+  ///Default constructor for the BottomWidget.
   const BottomWidget({super.key});
 
   @override
   State<BottomWidget> createState() => _BottomWidgetState();
 }
 
-/// the Fit enum  and Layers now are used for choice making which updates your screen based
-/// on the choice
+/// the Fit enum  and Layers now are used for choice making which updates your
+/// screen based on the choice
 enum Fit { fit, loose }
 
+///enum Layers which are now used for choice making and updating your screen.
 enum Layers { one, two }
 
 ///A class to store chosen Enum property.
 class _GarmentProperties {
-  Fit? fit;
-  Layers? layers;
+  _GarmentProperties({Fit? fit,Layers? layers}): _fit = fit, _layers = layers;
 
-  _GarmentProperties({this.fit, this.layers});
+  Fit? _fit;
+  Layers? _layers;
 
   @override
   String toString() {
-    return "Garment Properties: $fit, $layers";
+    return 'Garment Properties: $_fit, $_layers';
   }
 }
 
 ///enums which are now used for choice making and updating your screen.
 enum WorkIntensity { low, moderate, intense }
 
+///enums which are now used for choice making and updating your screen.
 enum Purpose { sport, protection }
 
+///enums which are now used for choice making and updating your screen.
 enum Scenario { indoors, outdoors }
 
 ///A basic class to store chosen Enum property.
 class _ActivitySettings {
-  WorkIntensity? workIntensity;
-  Purpose? purpose;
-  Scenario? scenario;
-
-  _ActivitySettings({this.workIntensity, this.purpose, this.scenario});
+  _ActivitySettings({
+    WorkIntensity? workIntensity,
+    Purpose? purpose,
+    Scenario? scenario,
+  })  : _scenario = scenario,
+        _purpose = purpose,
+        _workIntensity = workIntensity;
+  WorkIntensity? _workIntensity;
+  Purpose? _purpose;
+  Scenario? _scenario;
 
   @override
   String toString() {
-    return "Activity Settings: $workIntensity, $purpose, $scenario";
+    return 'Activity Settings: $_workIntensity, $_purpose, $_scenario';
   }
 }
 
 class _BottomWidgetState extends State<BottomWidget> {
-  _ActivitySettings activitySettings =
-      _ActivitySettings(workIntensity: null, purpose: null, scenario: null);
-  _GarmentProperties garmentProperties =
-      _GarmentProperties(fit: null, layers: null);
+  _ActivitySettings activitySettings = _ActivitySettings();
+  _GarmentProperties garmentProperties = _GarmentProperties();
+  int _temperature = 20;
+  int _humidity = 50;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Flexible(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildColumnTitleListTile(
-                'icons/Shirt_2.png',
-                "Garment Properties",
+              const Flexible(
+                fit: FlexFit.loose,
+                flex: 3,
+                child: TitleWidget(
+                  iconPath: 'icons/Shirt_2.png',
+                  title: 'Garment Properties',
+                ),
               ),
-              buildBoxGroupTitle(
-                "Fit",
+              Flexible(
+                flex: 2,
+                child: _subGroupTitle(
+                  'Fit',
+                ),
               ),
-              buildFlexibleRadioButtons(
-                Fit.values,
-                garmentProperties.fit,
-                  (newValue) {
-                    setState(() {
-                      garmentProperties.fit = newValue;
-                    });
-                  }
+              Flexible(
+                flex: 2,
+                child: _buildFlexibleRadioButtons(
+                    Fit.values, garmentProperties._fit, (newValue) {
+                  setState(() {
+                    garmentProperties._fit = newValue;
+                  });
+                }),
               ),
-              buildBoxGroupTitle(
-                "Layers",
+              Flexible(
+                flex: 2,
+                child: _subGroupTitle(
+                  'Layers',
+                ),
               ),
-              buildFlexibleRadioButtons(
-                Layers.values,
-                garmentProperties.layers,
-                      (newValue) {
-                    setState(() {
-                      garmentProperties.layers = newValue;
-                    });
-                  }
+              Flexible(
+                flex: 2,
+                child: _buildFlexibleRadioButtons(
+                    Layers.values, garmentProperties._layers, (newValue) {
+                  setState(() {
+                    garmentProperties._layers = newValue;
+                  });
+                }),
               ),
             ],
           ),
@@ -102,131 +122,215 @@ class _BottomWidgetState extends State<BottomWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              buildColumnTitleListTile(
-                'icons/17.png',
-                'Activity Settings',
+              const Flexible(
+                flex: 3,
+                fit: FlexFit.loose,
+                child: TitleWidget(
+                  iconPath: 'icons/17.png',
+                  title: 'Activity Settings',
+                ),
               ),
-              buildBoxGroupTitle(
-                'Work Intensity',
+              Flexible(
+                flex: 2,
+                child: _subGroupTitle(
+                  'Work Intensity',
+                ),
               ),
-              buildFlexibleRadioButtons(
-                WorkIntensity.values,
-                activitySettings.workIntensity,
-                    (newValue) {
-                  setState(() {
-                    activitySettings.workIntensity = newValue;
-                  });
-                },
+              Flexible(
+                flex: 2,
+                child: _buildFlexibleRadioButtons(
+                  WorkIntensity.values,
+                  activitySettings._workIntensity,
+                  (newValue) {
+                    setState(() {
+                      activitySettings._workIntensity = newValue;
+                    });
+                  },
+                ),
               ),
-              buildBoxGroupTitle(
-                "Purpose",
+              Flexible(
+                flex: 2,
+                child: _subGroupTitle(
+                  'Purpose',
+                ),
               ),
-              buildFlexibleRadioButtons(
-                Purpose.values,
-                activitySettings.purpose,
-                    (newValue) {
-                  setState(() {
-                    activitySettings.purpose = newValue;
-                  },);
-                },
+              Flexible(
+                flex: 2,
+                child: _buildFlexibleRadioButtons(
+                  Purpose.values,
+                  activitySettings._purpose,
+                  (newValue) {
+                    setState(
+                      () {
+                        activitySettings._purpose = newValue;
+                      },
+                    );
+                  },
+                ),
               ),
-              buildBoxGroupTitle(
-                "Scenario",
+              Flexible(
+                flex: 2,
+                child: _subGroupTitle(
+                  'Scenario',
+                ),
               ),
-              buildFlexibleRadioButtons(
-                Scenario.values,
-                activitySettings.scenario,
-                    (newValue) {
-                  setState(() {
-                    activitySettings.scenario = newValue;
-                  },);
-                },
+              Flexible(
+                flex: 2,
+                child: _buildFlexibleRadioButtons(
+                  Scenario.values,
+                  activitySettings._scenario,
+                  (newValue) {
+                    setState(
+                      () {
+                        activitySettings._scenario = newValue;
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           ),
         ),
-        Flexible(child: Container(color: Colors.black,),),],
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Flexible(
+                flex: 3,
+                child: TitleWidget(
+                  iconPath: 'icons/18.png',
+                  title: 'Environmental Variables',
+                ),
+              ),
+              Flexible(
+                flex: 2,
+                child: SizedBox(
+                  width: 400,
+                  child: _buildSlider(
+                    'Temperature (°C)',
+                    _temperature,
+                    -20,
+                    50,
+                    (newValue) {
+                      setState(() {
+                        _temperature = newValue.round();
+                      });
+                    },
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 2,
+                child: SizedBox(
+                  width: 400,
+                  child: _buildSlider(
+                    'Humidity (%)',
+                    _humidity,
+                    0,
+                    100,
+                    (newValue) {
+                      setState(() {
+                        _humidity = newValue.round();
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
-
-  ///A refactored ListTile on top of each Column to give an idea of what the
-  ///Column is about
-  Flexible buildColumnTitleListTile(
-      String assetName, final String columnTitle) {
-    return Flexible(
-      flex: 3,
-      child: ListTile(
-        hoverColor: Colors.orange,
-        contentPadding: EdgeInsets.zero,
-        leading: Image.asset(
-          assetName,
-          fit: BoxFit.contain,
-          width: 48,
-          height: 48,
+  Column _buildSlider(
+    String title,
+    int value,
+    int min,
+    int max,
+    ValueChanged<double> onChanged,
+  ) {
+    return Column(//TODO the 3rd column text is going down how to fix it?
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(
+          flex: 2,
+          child: _subGroupTitle(title, strutHeight: 1),
         ),
-        title: AutoSizeText(
-          columnTitle,
-          style: const TextStyle(fontSize: 24, color: Colors.lightBlue),
+        Flexible(
+          flex: 2,
+          child: Slider(
+            activeColor: Colors.grey[300],
+            thumbColor: Colors.black,
+            label: title,
+            value: value.toDouble(),
+            min: min.toDouble(),
+            max: max.toDouble(),
+            onChanged: onChanged,
+          ),
         ),
-      ),
+        Flexible(
+          flex: 2,
+          child: Container(
+            alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.only(right: 24),
+              child: AutoSizeText('$value', textAlign: TextAlign.end,),),
+        ),
+      ],
     );
   }
 
   ///Another refactored piece of code now for easier readability, updates and
-  ///maintainability.
-  Flexible buildFlexibleRadioButtons<T extends Enum>(
+  ///maintainability
+  Row _buildFlexibleRadioButtons<T extends Enum>(
     List<T> values,
     T? groupValue,
-      Function(T?)? onChanged,
+    void Function(T?)? onChanged,
   ) {
     int count = 0;
-    return Flexible(
-      flex: 2,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (T val in values)
-            Flexible(
-              child: SizedBox(
-                width: ++count > 1 ? 140 : 105,
-                child: RadioListTile(
-                  activeColor: Colors.blueAccent,
-                  hoverColor: Colors.orange,
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  title: AutoSizeText(
-                    val.name,
-                    style: const TextStyle(fontSize: 16.0),
-                    minFontSize: 14.0,
-                    overflow: TextOverflow.visible,
-                    maxLines: 2,
-                  ),
-                  value: val,
-                  groupValue: groupValue,
-                  onChanged: onChanged
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (final T val in values)
+          Flexible(
+            child: SizedBox(
+              width: ++count > 1 ? 140 : 105,
+              child: RadioListTile(
+                activeColor: Colors.black,
+                hoverColor: Colors.grey,
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                title: AutoSizeText(
+                  val.name,
+                  style: const TextStyle(fontSize: 16),
+                  minFontSize: 14,
+                  overflow: TextOverflow.visible,
+                  maxLines: 2,
                 ),
+                value: val,
+                groupValue: groupValue,
+                onChanged: onChanged,
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 
   ///Refactoring...
-  Flexible buildBoxGroupTitle(
+  AutoSizeText _subGroupTitle(
     String text, {
     double? strutHeight,
   }) {
-    return Flexible(
-      flex: 2,
-      child: AutoSizeText(
-        text,
-        style: const TextStyle(fontSize: 20.0),
-        overflow: TextOverflow.fade,
-        strutStyle: StrutStyle(height: strutHeight ?? 2),
-        minFontSize: 16.0,
-      ),
+    return AutoSizeText(
+      text,
+      style: const TextStyle(fontSize: 20),
+      overflow: TextOverflow.clip,
+      strutStyle: StrutStyle(height: strutHeight ?? 2),
+      minFontSize: 16,
+      maxLines: 2,
     );
   }
 }

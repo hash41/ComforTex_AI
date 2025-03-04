@@ -13,6 +13,7 @@ void main() {
 ///version of the app is not implemented.
 class App extends StatelessWidget {
 
+  ///Default constructor for the App Widget.
   const App({super.key});
 
 
@@ -23,10 +24,9 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'ComforTex AI',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: screenWidth < 600 ? const MobileScreen1(): const DesktopScreen1()
+      home: screenWidth < 600 ? const MobileScreen1(): const DesktopScreen1(),
     );
   }
 }
