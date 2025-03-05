@@ -262,8 +262,6 @@ class _BottomWidgetState extends State<BottomWidget> {
         Flexible(
           flex: 2,
           child: Slider(
-            activeColor: Colors.grey[300],
-            thumbColor: Colors.black,
             label: title,
             value: value.toDouble(),
             min: min.toDouble(),
@@ -299,7 +297,7 @@ class _BottomWidgetState extends State<BottomWidget> {
               width: ++count > 1 ? 140 : 105,
               child: RadioListTile(
                 activeColor: Colors.black,
-                hoverColor: Colors.grey,
+                hoverColor: Colors.grey[300],
                 dense: true,
                 contentPadding: EdgeInsets.zero,
                 title: AutoSizeText(
