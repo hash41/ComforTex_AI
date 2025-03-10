@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 ///MobileScreen1 displays the Mobile version screen1.
 class MobileScreen1 extends StatefulWidget {
+  ///Constructor for MobileScreen1
   const MobileScreen1({super.key});
 
   @override
@@ -21,7 +22,7 @@ class _MobileScreen1State extends State<MobileScreen1> {
         else {
           return Container();
         }
-      })
+      },),
     );
   }
 }
