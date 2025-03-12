@@ -10,6 +10,8 @@ class CenterWidget extends StatefulWidget {
   ///Constructor for the CenterWidget.
   const CenterWidget({super.key});
 
+  //TODO Smaller arrows for the PageView.
+  //TODO: better spacing the texts.
   @override
   State<CenterWidget> createState() => _CenterWidgetState();
 }
@@ -19,7 +21,7 @@ enum ShirtType { polo, t_shirt }
 
 class _CenterWidgetState extends State<CenterWidget> {
   String? _type;
-  final PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController();
   List<String> _textiles = [];
   int _currentPage = 0;
   Map<String, dynamic>? _materialsDescriptions;
@@ -105,7 +107,7 @@ class _CenterWidgetState extends State<CenterWidget> {
                 flex: 1,
                 fit: FlexFit.loose,
                 child: TitleWidget(
-                  iconPath: 'icons/Shirt_2.png',
+                  iconPath: 'assets/icons/Shirt_2.png',
                   title: 'Garment Type',
                 ),
               ),
@@ -128,7 +130,7 @@ class _CenterWidgetState extends State<CenterWidget> {
                             selected: _type == ShirtType.polo.name,
                             child: Image.asset(
                               fit: BoxFit.scaleDown,
-                              'icons/polo.png',
+                              'assets/icons/polo.png',
                             ),
                           ),
                         ),
@@ -148,7 +150,7 @@ class _CenterWidgetState extends State<CenterWidget> {
                             selected: _type == ShirtType.t_shirt.name,
                             child: Image.asset(
                               fit: BoxFit.scaleDown,
-                              'icons/t_shirt.png',
+                              'assets/icons/t_shirt.png',
                             ),
                           ),
                         ),
@@ -169,7 +171,7 @@ class _CenterWidgetState extends State<CenterWidget> {
               const Flexible(
                 flex: 1,
                 fit: FlexFit.loose,
-                child: TitleWidget(iconPath: 'icons/19.png', title: 'Material'),
+                child: TitleWidget(iconPath: 'assets/icons/19.png', title: 'Material'),
               ),
               Flexible(
                 flex: 4,
@@ -306,7 +308,7 @@ class _CenterWidgetState extends State<CenterWidget> {
                 Expanded(
                   child: Image.asset(
                     fit: BoxFit.fill,
-                    'textile/$_type/$img',
+                    'assets/textile/$_type/$img',
                   ),
                 )
               else
@@ -322,7 +324,7 @@ class _CenterWidgetState extends State<CenterWidget> {
                 Expanded(
                   child: Image.asset(
                     fit: BoxFit.fill,
-                    'textile/$_type/$img2',
+                    'assets/textile/$_type/$img2',
                   ),
                 )
               else

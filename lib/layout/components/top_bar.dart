@@ -16,7 +16,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-          child: Image.asset('icons/logo.png'),
+          child: Image.asset('assets/icons/logo.png'),
         ),
       ],
     );

@@ -80,7 +80,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                 fit: FlexFit.loose,
                 flex: 3,
                 child: TitleWidget(
-                  iconPath: 'icons/Shirt_2.png',
+                  iconPath: 'assets/icons/Shirt_2.png',
                   title: 'Garment Properties',
                 ),
               ),
@@ -126,7 +126,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                 flex: 3,
                 fit: FlexFit.loose,
                 child: TitleWidget(
-                  iconPath: 'icons/17.png',
+                  iconPath: 'assets/icons/17.png',
                   title: 'Activity Settings',
                 ),
               ),
@@ -199,7 +199,7 @@ class _BottomWidgetState extends State<BottomWidget> {
               const Flexible(
                 flex: 3,
                 child: TitleWidget(
-                  iconPath: 'icons/18.png',
+                  iconPath: 'assets/icons/18.png',
                   title: 'Environmental Variables',
                 ),
               ),
@@ -295,7 +295,7 @@ class _BottomWidgetState extends State<BottomWidget> {
           Flexible(
             child: SizedBox(
               width: ++count > 1 ? 140 : 105,
-              child: RadioListTile(
+              child: RadioListTile<T>(
                 activeColor: Colors.black,
                 hoverColor: Colors.grey[300],
                 dense: true,
