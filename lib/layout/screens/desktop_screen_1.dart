@@ -1,6 +1,6 @@
-import 'package:comfortex_ai/layout/components/bottom_widget.dart';
-import 'package:comfortex_ai/layout/components/center_widget.dart';
-import 'package:comfortex_ai/layout/components/top_bar.dart';
+import 'package:comfortex_ai/layout/components/desktop/bottom_widget.dart';
+import 'package:comfortex_ai/layout/components/desktop/center_widget.dart';
+import 'package:comfortex_ai/layout/components/desktop/top_bar.dart';
 import 'package:flutter/material.dart';
 
 ///DesktopScreen1 that gives us a display of the desktop widgets for screen 1.
@@ -30,7 +30,7 @@ class _DesktopScreen1State extends State<DesktopScreen1> {
               padding: MediaQuery.of(context).size.height * 0.02,
               height: MediaQuery.of(context).size.height * 0.35,
               child: const BottomWidget(),
-              //TODO: if card not applicable: replace with Row()
+              //todo: if card not applicable: replace with Row()
             ),
             SizedBox(
               //0.934

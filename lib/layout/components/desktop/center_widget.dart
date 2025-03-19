@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:comfortex_ai/layout/components/title_widget.dart';
+import 'package:comfortex_ai/layout/components/common/img_container.dart';
+import 'package:comfortex_ai/layout/components/common/title_widget.dart';
 import 'package:comfortex_ai/utils/file_listing.dart';
 import 'package:comfortex_ai/utils/parse_json.dart';
 import 'package:flutter/material.dart';
@@ -166,7 +167,8 @@ class _CenterWidgetState extends State<CenterWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Flexible(
-                child: TitleWidget(iconPath: 'assets/icons/19.png', title: 'Material'),
+                child: TitleWidget(
+                    iconPath: 'assets/icons/19.png', title: 'Material'),
               ),
               Flexible(
                 flex: 4,
@@ -342,31 +344,6 @@ class _CenterWidgetState extends State<CenterWidget> {
           height: 6,
         ),
       ],
-    );
-  }
-}
-
-/// A decoratedContainer to make the identification easier of selectedImage from
-/// [polo,tShirt].
-class ImgContainer extends StatelessWidget {
-  ///Constructor for the ImgContainer.
-  const ImgContainer({required Widget child, super.key, bool selected = false})
-      : _child = child,
-        _selected = selected;
-
-  final bool _selected;
-  final Widget _child;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
-      decoration: BoxDecoration(
-        border:
-            _selected ? Border.all(width: 4, color: Colors.lightBlue) : null,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: _child,
     );
   }
 }

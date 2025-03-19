@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:comfortex_ai/layout/components/title_widget.dart';
+import 'package:comfortex_ai/layout/components/common/title_widget.dart';
 import 'package:flutter/material.dart';
 
 ///The widget on the bottom of the DesktopScreen1.
@@ -260,6 +260,7 @@ class _BottomWidgetState extends State<BottomWidget> {
         Flexible(
           flex: 2,
           child: Slider(
+            key: Key(title),
             label: title,
             value: value.toDouble(),
             min: min.toDouble(),
@@ -329,4 +330,7 @@ class _BottomWidgetState extends State<BottomWidget> {
       maxLines: 2,
     );
   }
+
+  get _temperatureValue => _temperature;
+  get _humidityValue => _humidity;
 }
