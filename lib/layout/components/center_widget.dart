@@ -104,8 +104,6 @@ class _CenterWidgetState extends State<CenterWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Flexible(
-                flex: 1,
-                fit: FlexFit.loose,
                 child: TitleWidget(
                   iconPath: 'assets/icons/Shirt_2.png',
                   title: 'Garment Type',
@@ -114,7 +112,6 @@ class _CenterWidgetState extends State<CenterWidget> {
               Expanded(
                 flex: 4,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Flexible(
                       fit: FlexFit.tight,
@@ -169,8 +166,6 @@ class _CenterWidgetState extends State<CenterWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Flexible(
-                flex: 1,
-                fit: FlexFit.loose,
                 child: TitleWidget(iconPath: 'assets/icons/19.png', title: 'Material'),
               ),
               Flexible(
@@ -197,7 +192,6 @@ class _CenterWidgetState extends State<CenterWidget> {
                         itemBuilder: (context, index) {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               buildExpandedButton(
                                 Icon(
@@ -237,7 +231,6 @@ class _CenterWidgetState extends State<CenterWidget> {
 
   Expanded buildExpandedButton(Icon icon, VoidCallback? onTap) {
     return Expanded(
-      flex: 1,
       child: InkWell(
         onTap: onTap,
         child: FittedBox(
@@ -251,7 +244,7 @@ class _CenterWidgetState extends State<CenterWidget> {
   ///Locks 4 Items inside the [PageView].
   ///Its result is returned to be used in PageView.
   List<Widget> _loadTextiles(int page) {
-    final int imgIndex = page * 8;
+    final imgIndex = page * 8;
     return [
       Expanded(
         child: Row(
@@ -347,7 +340,7 @@ class _CenterWidgetState extends State<CenterWidget> {
         ),
         const SizedBox(
           height: 6,
-        )
+        ),
       ],
     );
   }

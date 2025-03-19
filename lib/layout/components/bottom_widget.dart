@@ -77,7 +77,6 @@ class _BottomWidgetState extends State<BottomWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Flexible(
-                fit: FlexFit.loose,
                 flex: 3,
                 child: TitleWidget(
                   iconPath: 'assets/icons/Shirt_2.png',
@@ -124,7 +123,6 @@ class _BottomWidgetState extends State<BottomWidget> {
             children: [
               const Flexible(
                 flex: 3,
-                fit: FlexFit.loose,
                 child: TitleWidget(
                   iconPath: 'assets/icons/17.png',
                   title: 'Activity Settings',
@@ -287,7 +285,7 @@ class _BottomWidgetState extends State<BottomWidget> {
     T? groupValue,
     void Function(T?)? onChanged,
   ) {
-    int count = 0;
+    var count = 0;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

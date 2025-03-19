@@ -1,6 +1,6 @@
+import 'package:comfortex_ai/layout/components/bottom_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:comfortex_ai/layout/components/bottom_widget.dart';
 
 void main() {
   testWidgets('Test BottomWidget', (WidgetTester tester) async {

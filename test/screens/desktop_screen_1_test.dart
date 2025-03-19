@@ -1,4 +1,3 @@
-import 'package:comfortex_ai/layout/components/bottom_widget.dart';
 import 'package:comfortex_ai/layout/screens/desktop_screen_1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +14,7 @@ void main() {
     expect(find.text('Environmental Variables'), findsOneWidget);
     await tester.tap(find.text('loose'));
     await tester.pump();
-    RadioListTile option = tester.widget(find.widgetWithText(RadioListTile, 'loose'));
+    final option = tester.widget(find.widgetWithText(RadioListTile, 'loose'));
     // for(WorkIntensity val in WorkIntensity.values){
     //   await tester.tap(find.text(val.name));
     //   await tester.pump();
