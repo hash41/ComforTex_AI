@@ -16,20 +16,21 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: Image.asset(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+      Image.asset(
         _iconPath,
         fit: BoxFit.contain,
         width: 48,
         height: 48,
       ),
-      title: AutoSizeText(
+      AutoSizeText(
         _title,
         overflow: TextOverflow.clip,
         maxLines: 2,
         style: const TextStyle(fontSize: 24, color: Colors.lightBlue),
       ),
-    );
+      ],);
   }
 }

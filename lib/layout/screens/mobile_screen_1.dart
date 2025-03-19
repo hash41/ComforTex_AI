@@ -28,16 +28,16 @@ class _MobileScreen1State extends State<MobileScreen1> {
                 appBar: TopBar(MediaQuery.of(context).size.height * 0.1),
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[const Center(
-                      child: SizedBox(
-                        height: 60,
-                        width: 300,
-                        child: TitleWidget(
-                          iconPath: 'assets/icons/Shirt_2.png',
-                          title: 'Garment Type',
-                        ),
+                  children: <Widget>[const Flexible(
+                    child: SizedBox(
+                      height: 50,
+                      width: 200,
+                      child: TitleWidget(
+                        iconPath: 'assets/icons/Shirt_2.png',
+                        title: 'Garment Type',
                       ),
                     ),
+                  ),
                     Flexible(
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.2,
@@ -64,7 +64,7 @@ class _MobileScreen1State extends State<MobileScreen1> {
                           child: ImgContainer(
                             selected: _type == ShirtType.polo.name,
                             child: Image.asset(
-                              fit: BoxFit.scaleDown,
+                              fit: BoxFit.contain,
                               'assets/icons/polo.png',
                             ),
                           ),

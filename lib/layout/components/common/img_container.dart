@@ -14,10 +14,11 @@ class ImgContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
+      padding: const EdgeInsets.all(4),
       duration: const Duration(milliseconds: 450),
       decoration: BoxDecoration(
         border:
-        _selected ? Border.all(width: 4, color: Colors.lightBlue) : null,
+        _selected ? Border.all(width: 8, color: Colors.lightBlue) : null,
         borderRadius: BorderRadius.circular(16),
       ),
       child: _child,
