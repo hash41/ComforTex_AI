@@ -1,0 +1,229 @@
+import 'package:comfortex_ai/layout/ui_components/common/title_widget.dart';
+import 'package:comfortex_ai/layout/ui_components/common/top_bar.dart';
+import 'package:comfortex_ai/model/properties.dart';
+import 'package:comfortex_ai/utils/style.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class DesktopResultsScreen extends StatelessWidget {
+  Properties properties;
+  DesktopResultsScreen(this.properties, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      appBar: TopBar(
+        height: height < 1200 ? Style.topBarHeightDesktop :
+          Style.topBarOver1200,
+        leading: Center(
+          child: MaterialButton(
+            height: 48,
+            color: Colors.grey.shade200,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Back to Selection',
+              style:
+              GoogleFonts.roboto(
+                textStyle: Style.buttonTextDesktop,
+              ),
+            ),
+          ),
+        ),
+        loggedIn: true,
+        options: true,
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Gap(32),
+                      const Flexible(child: TitleWidget(title: 'Comfort Prediction')),
+                      const Gap(16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: buildCriteriaRow('Thermal',
+                                properties.prediction?.thermal ?? ''),
+                          ),
+                          Expanded(
+                            child: buildCriteriaRow('Moisture',
+                                properties.prediction?.moisture ?? ''),
+                          ),
+                          Expanded(
+                            child: buildCriteriaRow('Comfort',
+                                properties.prediction?.comfort ?? ''),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (height > 500)
+            Expanded(
+              flex: 3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  if(width > 1420)  const Spacer() else Gap(32),
+                  Flexible(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Flexible(
+                          child: TitleWidget(title: 'Relevant features',center: false,),
+                        ),
+                        const Gap(16),
+                        Text('If the arrow is up, it helps comfort. If the arrow is down, it reduces comfort.',
+                          style: GoogleFonts.roboto(textStyle:
+                          Style.captionTextDesktop.copyWith(fontWeight: FontWeight.w600, fontSize: 15),
+                          ),
+                        ),
+                        const Gap(16),
+                        for (var key
+                            in properties.prediction?.keyFactors?.keys ?? [])
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 240,
+                                child: Text(
+                                  key != null ? '$key:' : '',
+                                  style:
+                                  GoogleFonts.roboto(
+                                    textStyle:Style.bodyTextDesktop,
+                                  ),
+                                  overflow: TextOverflow.clip,
+                                ),
+                              ),
+                              const Gap(16),
+                              SizedBox(
+                                width: 50,
+                                child: Text(
+                                  textAlign: TextAlign.right,
+                                  properties
+                                          .prediction?.keyFactors?[key]?[0]
+                                          .toString() ??
+                                      '',
+                                  style: GoogleFonts.roboto(
+                                    textStyle: Style.bodyTextDesktop.copyWith(
+                                        textBaseline:
+                                        TextBaseline.alphabetic),
+                                  ),
+                                  overflow: TextOverflow.clip,
+                                ),
+                              ),
+                              const Gap(16),
+                              properties.prediction?.keyFactors?[key]?[1]
+                                  as Icon,
+                            ],
+                          ),
+                        const Spacer(),
+                      ],
+                    ),
+                  ),
+                  if(width > 1420)  const Spacer() else Gap(8),
+                  if (width > 800)
+                    Flexible(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Flexible(child: TitleWidget(title: 'Your selection', center: false,)),
+                          const Gap(24),
+                          Expanded(
+                            child: Wrap(
+                              spacing: 48,
+                              runSpacing: 36,
+                              children: [
+                                buildPropertyColumn(
+                                    'Shirt Type', properties.shirtType!.name),
+                                buildPropertyColumn(
+                                  'Material',
+                                  properties.material!,
+                                ),
+                                buildPropertyColumn(
+                                    'Layers', properties.layers!.name),
+                                buildPropertyColumn(
+                                    'purpose', properties.purpose!.name),
+                                buildPropertyColumn(
+                                    'Fit', properties.fit!.name),
+                                buildPropertyColumn('Temperature',
+                                    properties.temperature.toString()),
+                                buildPropertyColumn('Humidity',
+                                    properties.humidity.toString()),
+                                buildPropertyColumn('Work Intensity',
+                                    properties.workIntensity!.name),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if(width > 1420)  const Spacer() else const Gap(24),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Column buildPropertyColumn(String title, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style:
+        GoogleFonts.roboto(
+          textStyle: Style.bodyTextDesktop
+        ),
+        ),
+        Text(value, style: GoogleFonts.roboto(
+    textStyle: Style.resultTextDesktop),
+        ),
+      ],
+    );
+  }
+
+  Column buildCriteriaRow(String criteria, String value) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          criteria,
+          style:
+          GoogleFonts.roboto(
+            textStyle: Style.captionTextDesktop),
+        ),
+        Gap(10),
+        Text(
+          value,
+          maxLines: 1,
+          style:
+          GoogleFonts.roboto(
+          textStyle: Style.desktopTitle
+              .copyWith(color: Colors.orange, overflow: TextOverflow.clip),
+          ),
+        ),
+      ],
+    );
+  }
+}

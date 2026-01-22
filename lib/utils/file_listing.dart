@@ -1,22 +1,17 @@
-import 'dart:convert'; // for jsonDecode
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
 
 
 ///A function to list the assets in a folderPath.
 Future<List<String>> listAssets(String folderPath) async {
-  // Load the AssetManifest.json file as a string
-  final manifestContent = await rootBundle.loadString('AssetManifest.json');
+  // Normalize so startsWith works reliably
+  if (!folderPath.endsWith('/')) folderPath = '$folderPath/';
 
-  // Decode the JSON into a Map
-  final manifestMap =
-      jsonDecode(manifestContent) as Map<String, dynamic>;
-
-  // The keys of this map are full asset paths like "assets/images/image1.png"
-  // We filter them by checking if they start with our desired folder path
-  final assets = manifestMap.keys
-      .where((String key) => key.startsWith(folderPath))
-      .map((str) => str.replaceAll(folderPath, ''))
+  final manifest = await AssetManifest.loadFromAssetBundle(rootBundle); //  [oai_citation:1‡api.flutter.dev](https://api.flutter.dev/flutter/services/AssetManifest/loadFromAssetBundle.html?utm_source=chatgpt.com)
+  final assets = manifest
+      .listAssets() // List<String> of main asset keys  [oai_citation:2‡api.flutter.dev](https://api.flutter.dev/flutter/services/AssetManifest/listAssets.html?utm_source=chatgpt.com)
+      .where((key) => key.startsWith(folderPath))
+      .map((key) => key.substring(folderPath.length))
       .toList();
-  print(assets);
+
   return assets;
 }
