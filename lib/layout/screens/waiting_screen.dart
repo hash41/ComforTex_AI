@@ -14,6 +14,7 @@ import 'package:comfortex_ai/layout/screens/mobile_results_screen.dart';
 import 'package:comfortex_ai/layout/screens/screen.dart';
 import 'package:comfortex_ai/layout/ui_components/common/top_bar.dart';
 import 'package:comfortex_ai/layout/ui_components/mobile/back_button.dart';
+import 'package:comfortex_ai/model/Properties_v2.dart';
 import 'package:comfortex_ai/model/properties.dart';
 import 'package:comfortex_ai/utils/Networking.dart';
 import 'package:comfortex_ai/utils/style.dart';
@@ -23,7 +24,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class WaitingScreen extends StatefulWidget {
-  Properties properties;
+  PropertiesV2 properties;
   WaitingScreen(this.properties, {super.key});
 
   @override

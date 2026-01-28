@@ -1,5 +1,6 @@
 import 'package:comfortex_ai/layout/ui_components/common/title_widget.dart';
 import 'package:comfortex_ai/layout/ui_components/common/top_bar.dart';
+import 'package:comfortex_ai/model/Properties_v2.dart';
 import 'package:comfortex_ai/model/properties.dart';
 import 'package:comfortex_ai/utils/style.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DesktopResultsScreen extends StatelessWidget {
-  Properties properties;
+  PropertiesV2 properties;
   DesktopResultsScreen(this.properties, {super.key});
 
   @override
@@ -161,17 +162,17 @@ class DesktopResultsScreen extends StatelessWidget {
                                   properties.material!,
                                 ),
                                 buildPropertyColumn(
-                                    'Layers', properties.layers!.name),
+                                    'Layers', properties.layers!),
                                 buildPropertyColumn(
-                                    'purpose', properties.purpose!.name),
+                                    'purpose', properties.purpose!),
                                 buildPropertyColumn(
-                                    'Fit', properties.fit!.name),
+                                    'Fit', properties.fit!),
                                 buildPropertyColumn('Temperature',
                                     properties.temperature.toString()),
                                 buildPropertyColumn('Humidity',
                                     properties.humidity.toString()),
                                 buildPropertyColumn('Work Intensity',
-                                    properties.workIntensity!.name),
+                                    properties.workIntensity!),
                               ],
                             ),
                           ),

@@ -2,8 +2,8 @@ import 'package:comfortex_ai/layout/screens/waiting_screen.dart';
 import 'package:comfortex_ai/layout/ui_components/common/title_widget.dart';
 import 'package:comfortex_ai/layout/ui_components/common/top_bar.dart';
 import 'package:comfortex_ai/layout/ui_components/mobile/back_button.dart';
+import 'package:comfortex_ai/model/Properties_v2.dart';
 import 'package:comfortex_ai/model/ai_version.dart';
-import 'package:comfortex_ai/model/properties.dart';
 import 'package:comfortex_ai/utils/assets.dart';
 import 'package:comfortex_ai/utils/style.dart';
 import 'package:flutter/foundation.dart';
@@ -12,7 +12,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GarmentPropertiesScreen extends StatefulWidget {
-  final Properties properties;
+  final PropertiesV2 properties;
   const GarmentPropertiesScreen({required this.properties, super.key});
 
   @override
@@ -37,7 +37,7 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
     'low',
     'high',
     'Light',
-    'High',
+    'Heavy',
     'outdoors',
     'Outdoors'
   ];
@@ -175,7 +175,7 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                                     const Gap(2),
                                     ..._buildButtons(
                                         'Fit',
-                                        widget.properties.fitValues,
+                                        widget.properties.fitList,
                                         widget.properties.fit, (newValue) {
                                       setState(() {
                                         widget.properties.fit = newValue;
@@ -185,9 +185,9 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                                     const Gap(2),
                                     ..._buildButtons(
                                         'Layers',
-                                        widget.properties.layersValues,
+                                        widget.properties.layersList,
                                         widget.properties.layers,
-                                        (Enum newValue) {
+                                        (newValue) {
                                       setState(() {
                                         widget.properties.layers = newValue;
                                       });
@@ -234,9 +234,9 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                                     const Gap(2),
                                     ..._buildButtons(
                                         'Work Intensity',
-                                        widget.properties.workIntensityValues,
+                                        widget.properties.workIntensityList,
                                         widget.properties.workIntensity,
-                                        (Enum newValue) {
+                                        (newValue) {
                                       setState(() {
                                         widget.properties.workIntensity =
                                             newValue;
@@ -246,9 +246,9 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                                     const Gap(2),
                                     ..._buildButtons(
                                         'Purpose',
-                                        widget.properties.purposeValues,
+                                        widget.properties.purposeList,
                                         widget.properties.purpose,
-                                        (Enum newValue) {
+                                        (newValue) {
                                       setState(() {
                                         widget.properties.purpose = newValue;
                                       });
@@ -257,9 +257,9 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                                     const Gap(2),
                                     ..._buildButtons(
                                         'Scenario',
-                                        widget.properties.scenarioValues,
+                                        widget.properties.scenarioList,
                                         widget.properties.scenario,
-                                        (Enum newValue) {
+                                        (newValue) {
                                       setState(() {
                                         widget.properties.scenario = newValue;
                                       });
@@ -464,7 +464,7 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                                   const Gap(2),
                                   ..._buildButtons(
                                     'Fit',
-                                    widget.properties.fitValues,
+                                    widget.properties.fitList,
                                     widget.properties.fit,
                                     (newValue) {
                                       setState(() {
@@ -476,9 +476,9 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                                   const Gap(2),
                                   ..._buildButtons(
                                     'Layers',
-                                    widget.properties.layersValues,
+                                    widget.properties.layersList,
                                     widget.properties.layers,
-                                    (Enum newValue) {
+                                    (newValue) {
                                       setState(() {
                                         widget.properties.layers = newValue;
                                       });
@@ -519,7 +519,7 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                                 const Gap(2),
                                 ..._buildButtons(
                                   'Work Intensity',
-                                  widget.properties.workIntensityValues,
+                                  widget.properties.workIntensityList,
                                   widget.properties.workIntensity,
                                   (newValue) {
                                     setState(() {
@@ -532,7 +532,7 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                                 const Gap(2),
                                 ..._buildButtons(
                                   'Purpose',
-                                  widget.properties.purposeValues,
+                                  widget.properties.purposeList,
                                   widget.properties.purpose,
                                   (newValue) {
                                     setState(() {
@@ -544,7 +544,7 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                                 const Gap(2),
                                 ..._buildButtons(
                                   'Scenario',
-                                  widget.properties.scenarioValues,
+                                  widget.properties.scenarioList,
                                   widget.properties.scenario,
                                   (newValue) {
                                     setState(() {
@@ -567,7 +567,7 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TitleWidget(
+                        const TitleWidget(
                           iconPath: Assets.ENVIRONMENTAL_VAR_ICON,
                           title: 'Environmental Variables',
                           isMobile: true,
@@ -908,11 +908,11 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
     );
   }
 
-  List<Widget> _buildButtons<T extends Enum>(
+  List<Widget> _buildButtons(
     String title,
-    List<T> enumValues,
-    T? finalValue,
-    ValueChanged<T> onChanged,
+    List<String> enumValues,
+    String? finalValue,
+    ValueChanged<String> onChanged,
   ) {
     //we have a list of enum values and we have the finalValue that is the one that is selected.
     //OnChanged changes that value?
@@ -936,8 +936,8 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [],
     );
-    for (final T value in enumValues) {
-      bool greyOut = greyedOut.contains(value.name);
+    for (final value in enumValues) {
+      bool greyOut = greyedOut.contains(value);
       buttons.children.add(
         ElevatedButton(
           onPressed: () {
@@ -947,7 +947,7 @@ class _GarmentPropertiesScreenState extends State<GarmentPropertiesScreen>
           },
           style: getButtonStyle(finalValue == value, greyedOut: greyOut),
           child: Text(
-            value.name.toLowerCase(),
+            value.toLowerCase(),
             style: GoogleFonts.roboto(
               textStyle: Style.bodyTextMobile.copyWith(height: 1),
             ),

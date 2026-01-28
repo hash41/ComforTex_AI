@@ -27,13 +27,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global =
       MyHttpOverrides(); //Temporary override, TODO: NOT FOR PRODUCTION
-  bool loggedIn = false;
+  var loggedIn = false;
   try {
     ///TODO: the refreshToken on web will not work in development
     ///TODO: because we are on local host but the backend is on "mac.lan"
-    PropertiesV2 propertiesV2 = PropertiesV2();
-    final props = await propertiesV2.generateProperties();
-    print(propertiesV2);
     if(kIsWeb) {
     loggedIn = await AuthApiWeb().isLoggedIn();
     } else {

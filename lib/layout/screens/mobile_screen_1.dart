@@ -5,8 +5,8 @@ import 'package:comfortex_ai/layout/ui_components/common/img_container.dart';
 import 'package:comfortex_ai/layout/ui_components/common/page_builder.dart';
 import 'package:comfortex_ai/layout/ui_components/common/title_widget.dart';
 import 'package:comfortex_ai/layout/ui_components/common/top_bar.dart';
+import 'package:comfortex_ai/model/Properties_v2.dart';
 import 'package:comfortex_ai/utils/assets.dart';
-import 'package:comfortex_ai/model/properties.dart';
 import 'package:comfortex_ai/utils/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -15,7 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 ///MobileScreen1 displays the Mobile version screen1.
 class MobileScreen1 extends StatefulWidget {
-  Properties properties;
+  PropertiesV2 properties;
 
   ///Constructor for MobileScreen1
   MobileScreen1(this.properties, {super.key});
@@ -26,7 +26,7 @@ class MobileScreen1 extends StatefulWidget {
 
 class _MobileScreen1State extends State<MobileScreen1>
     with TickerProviderStateMixin {
-  late Properties properties = widget.properties;
+  late PropertiesV2 properties = widget.properties;
   static const String _title = 'Garment Type';
   static const String _ChooseOne = 'Choose one of these';
   late AnimationController _controller;

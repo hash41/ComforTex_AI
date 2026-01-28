@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:comfortex_ai/layout/ui_components/common/page_builder.dart';
 import 'package:comfortex_ai/layout/ui_components/common/img_container.dart';
 import 'package:comfortex_ai/layout/ui_components/common/title_widget.dart';
-import 'package:comfortex_ai/model/properties.dart';
+import 'package:comfortex_ai/model/Properties_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,7 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 class CenterWidget extends StatefulWidget {
   ///Constructor for the CenterWidget.
   CenterWidget(this.properties, this.changeShirt, this.setDescription, {super.key,});
-  Properties properties;
+  PropertiesV2 properties;
   final void Function(ShirtType) changeShirt;
   final void Function(String description) setDescription;
   //TODO Smaller arrows for the PageView.

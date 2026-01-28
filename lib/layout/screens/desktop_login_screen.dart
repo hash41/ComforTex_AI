@@ -1,15 +1,9 @@
-import 'dart:math';
-
 import 'package:comfortex_ai/exception/bad_request_exception.dart';
 import 'package:comfortex_ai/exception/many_requests_exception.dart';
 import 'package:comfortex_ai/exception/server_exception.dart';
 import 'package:comfortex_ai/exception/unauthorized_exception.dart';
-import 'package:comfortex_ai/layout/screens/desktop_screen_1.dart';
-import 'package:comfortex_ai/layout/screens/mobile_screen_1.dart';
-import 'package:comfortex_ai/layout/screens/screen.dart';
 import 'package:comfortex_ai/layout/screens/select_ai_screen.dart';
 import 'package:comfortex_ai/layout/ui_components/common/top_bar.dart';
-import 'package:comfortex_ai/model/properties.dart';
 import 'package:comfortex_ai/utils/auth_api_mobile.dart';
 import 'package:comfortex_ai/utils/auth_api_v2.dart';
 import 'package:comfortex_ai/utils/auth_api_web.dart';
@@ -51,7 +45,7 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
     } else {
       authApi = AuthApiMobile();
     }
-    if (username == null || password == null || username == '' || password == '') {
+    if (username == '' || password == '') {
       setState(() {
         _buttonEnabled = true;
         message = 'username and password cannot be empty';
@@ -118,11 +112,11 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
         setState(() {
           message = e.message;
         });
-      } on ClientException catch (e) {
+      } on ClientException {
         setState(() {
           message = "The connection to the server couldn't be established";
         });
-      } on BadRequestException catch (e) {
+      } on BadRequestException {
         setState(() {
           message = "The request you've sent is not correct..";
         });
@@ -234,7 +228,7 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
                   Flexible(
                     child: TextField(
                       maxLength: 16,
-                      onChanged: (String value) => username = value??'',
+                      onChanged: (String value) => username = value,
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.center,
                       textInputAction: TextInputAction.next,
@@ -271,7 +265,7 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
                     child: TextField(
                       maxLength: 16,
                       obscureText: true,
-                      onChanged: (String value) => password = value??'',
+                      onChanged: (String value) => password = value,
                       decoration: const InputDecoration(filled: true),
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.center,

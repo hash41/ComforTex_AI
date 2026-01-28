@@ -3,7 +3,7 @@ import 'package:comfortex_ai/layout/ui_components/desktop/bottom_widget.dart';
 import 'package:comfortex_ai/layout/ui_components/desktop/center_widget.dart';
 import 'package:comfortex_ai/layout/ui_components/common/top_bar.dart';
 import 'package:comfortex_ai/layout/screens/waiting_screen.dart';
-import 'package:comfortex_ai/model/properties.dart';
+import 'package:comfortex_ai/model/Properties_v2.dart';
 import 'package:comfortex_ai/utils/style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 ///DesktopScreen1 that gives us a display of the desktop widgets for screen 1.
 class DesktopScreen1 extends StatefulWidget {
-  Properties properties;
+  PropertiesV2 properties;
   ///DesktopScreen1 constructor.
   DesktopScreen1(this.properties, {super.key});
 

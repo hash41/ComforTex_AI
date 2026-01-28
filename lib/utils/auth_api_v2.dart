@@ -6,7 +6,7 @@ import 'package:comfortex_ai/exception/many_requests_exception.dart';
 import 'package:comfortex_ai/exception/server_exception.dart';
 import 'package:comfortex_ai/exception/unauthorized_exception.dart';
 import 'package:comfortex_ai/exception/unprocessable_entity_exception.dart';
-import 'package:comfortex_ai/model/properties.dart';
+import 'package:comfortex_ai/model/Properties_v2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -61,7 +61,7 @@ abstract class AuthApiv2 {
   ///are required .
   Future<bool> isLoggedIn();
   /// Make an authenticated GET
-  Future<http.Response> get(String path, Properties properties) async {
+  Future<http.Response> get(String path, PropertiesV2 properties) async {
     // Uri uri;
     final url1 = getUrl(path);
     final uri = url1.replace(queryParameters: properties.toJson());

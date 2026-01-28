@@ -3,10 +3,10 @@ import 'package:comfortex_ai/layout/ui_components/common/img_container.dart';
 import 'package:comfortex_ai/layout/screens/desktop_screen_1.dart';
 import 'package:comfortex_ai/layout/screens/garment_properties_screen.dart';
 import 'package:comfortex_ai/layout/screens/screen.dart';
+import 'package:comfortex_ai/model/Properties_v2.dart';
 import 'package:comfortex_ai/utils/assets.dart';
 import 'package:comfortex_ai/utils/file_listing.dart';
 import 'package:comfortex_ai/utils/parse_json.dart';
-import 'package:comfortex_ai/model/properties.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
@@ -27,7 +27,7 @@ class PageBuilder extends StatefulWidget {
   final bool mobileWidget;
 
   ///properties passed from the parent widget.
-  final Properties properties;
+  final PropertiesV2 properties;
 
   ///setDescription is a function that takes a string and returns void.
   final void Function(String description) setDescription;

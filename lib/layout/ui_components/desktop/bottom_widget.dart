@@ -3,9 +3,8 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:comfortex_ai/layout/ui_components/common/MyCustomScrollBehavior.dart';
 import 'package:comfortex_ai/layout/ui_components/common/title_widget.dart';
-import 'package:comfortex_ai/model/properties.dart';
-import 'package:comfortex_ai/model/properties_legacy.dart';
-import 'package:comfortex_ai/model/properties_new.dart';
+import 'package:comfortex_ai/model/Properties_v2.dart';
+
 import 'package:comfortex_ai/utils/style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 class BottomWidget extends StatefulWidget {
   ///Default constructor for the BottomWidget.
   BottomWidget(this.properties, {super.key});
-  Properties properties;
+  PropertiesV2 properties;
 
   @override
   State<BottomWidget> createState() => _BottomWidgetState();
@@ -87,7 +86,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                           ),
                           Flexible(
                             child: _buildFlexibleRadioButtons(
-                                widget.properties.fitValues,
+                                widget.properties.fitList,
                                 [],
                                 widget.properties.fit,
                                     (newValue) {
@@ -111,7 +110,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                           ),
                           Flexible(
                             child: _buildFlexibleRadioButtons(
-                                widget.properties.layersValues,
+                                widget.properties.layersList,
                                 <String>[
                                   'two', 'Two'
                                   //, 'Three'
@@ -156,8 +155,8 @@ class _BottomWidgetState extends State<BottomWidget> {
                           ),
                           Flexible(
                             child: _buildFlexibleRadioButtons(
-                              widget.properties.workIntensityValues,
-                              ['low', 'high', 'Light', 'High'],
+                              widget.properties.workIntensityList,
+                              ['low', 'high', 'Light', 'Heavy',],
                               widget.properties.workIntensity,
                               (newValue) {
                                 setState(() {
@@ -173,7 +172,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                           ),
                           Flexible(
                             child: _buildFlexibleRadioButtons(
-                              widget.properties.purposeValues,
+                              widget.properties.purposeList,
                               ['Casual', ],
                               widget.properties.purpose,
                               (newValue) {
@@ -192,7 +191,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                           ),
                           Flexible(
                             child: _buildFlexibleRadioButtons(
-                              widget.properties.scenarioValues,
+                              widget.properties.scenarioList,
                               ['outdoors', 'Outdoors'],
                               widget.properties.scenario,
                               (newValue) {
@@ -306,21 +305,21 @@ class _BottomWidgetState extends State<BottomWidget> {
 
   ///Another refactored piece of code now for easier readability, updates and
   ///maintainability
-  Row _buildFlexibleRadioButtons<T extends Enum>(
-    List<T> values,
+  Row _buildFlexibleRadioButtons(
+    List<String> values,
     List<String> greyedOutValues,
-    T? groupValue,
-    void Function(T?)? onChanged,
+    String? groupValue,
+    void Function(String?)? onChanged,
   ) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (final T val in values)
+        for (final String val in values)
             Flexible(
               child: SizedBox(
                 width: 160,
                 height: 100,
-                child: RadioListTile<T>(
+                child: RadioListTile<String>(
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   activeColor: Colors.black,
                   hoverColor: Colors.lightGreen,
@@ -331,7 +330,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                       vertical: VisualDensity.minimumDensity),
                   contentPadding: EdgeInsets.zero,
                   title: Text(
-                    val.name.toLowerCase(),
+                    val.toLowerCase(),
                     style: GoogleFonts.roboto(
                       textStyle: Style.bodyTextDesktop,
                     ),
@@ -341,7 +340,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                   value: val,
                   groupValue: groupValue,
                   onChanged: onChanged,
-                  enabled: !greyedOutValues.contains(val.name),
+                  enabled: !greyedOutValues.contains(val),
                 ),
               ),
             ),
