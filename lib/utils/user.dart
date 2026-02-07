@@ -1,4 +1,4 @@
-//TODO: In future versions we could make a specific user class
+//TODO(Hash): In future versions we could make a specific user class
 //
 // class User {
 //   //static SharedPreferences? _prefs;

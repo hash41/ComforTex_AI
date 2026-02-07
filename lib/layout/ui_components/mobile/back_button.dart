@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
+
+/// A button in the appbar to pop the current context (return to the previous
+/// screen)
 class MaterialBackButton extends StatelessWidget {
+  /// Default constructor..
   const MaterialBackButton({
     super.key,
   });

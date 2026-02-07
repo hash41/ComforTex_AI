@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:comfortex_ai/layout/screens/desktop_screen_1.dart';
 import 'package:comfortex_ai/layout/screens/mobile_screen_1.dart';
 import 'package:comfortex_ai/layout/screens/screen.dart';
@@ -10,36 +8,43 @@ import 'package:comfortex_ai/utils/style.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+/// A widget rendered for the user to select an AI
 class SelectAiScreen extends StatelessWidget {
-  PropertiesV2 properties = PropertiesV2();
-  ValueNotifier<String> message = ValueNotifier<String>('');
-  AiVersionStore aiDecider = AiVersionStore.instance;
+  /// Default constructor
   SelectAiScreen({super.key});
+
+  /// A properties containing wide range of objects
+  final PropertiesV2 properties = PropertiesV2();
+
+  /// A notifier to help display text in a stateless widget
+  final ValueNotifier<String> message = ValueNotifier<String>('');
+
+  /// AiVersionStore singleton
+  final AiVersionStore aiDecider = AiVersionStore.instance;
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.sizeOf(context).height;//Can be final, because the
-    //build method will run again after change of screensize..
+    final height =
+        MediaQuery.sizeOf(context).height; //Can be final, because the
+    //build method will run again after change of screen size..
     final orientation = MediaQuery.of(context).orientation;
-    double topBarheight;
-    if(height < 650) {
-      if(orientation == Orientation.portrait) {
-        topBarheight = Style.topBarHeightPortrait;
+    double topbarHeight;
+    if (height < 650) {
+      if (orientation == Orientation.portrait) {
+        topbarHeight = Style.topBarHeightPortrait;
       } else {
-        topBarheight = Style.topBarHeightLandscape;
+        topbarHeight = Style.topBarHeightLandscape;
       }
-    }
-    else if(height > 650 && height < 1200) {
-      topBarheight = Style.topBarHeightDesktop;
-    }
-    else {
-      topBarheight = Style.topBarOver1200;
+    } else if (height > 650 && height < 1200) {
+      topbarHeight = Style.topBarHeightDesktop;
+    } else {
+      topbarHeight = Style.topBarOver1200;
     }
     return SafeArea(
       child: Scaffold(
         appBar: TopBar(
           loggedIn: true,
-          height: topBarheight,
+          height: topbarHeight,
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -52,90 +57,98 @@ class SelectAiScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildMaterialButton(AiVersion.one, context,),
+                buildMaterialButton(
+                  AiVersion.one,
+                  context,
+                ),
                 const Gap(27),
-                buildMaterialButton(AiVersion.two, context,),
+                buildMaterialButton(
+                  AiVersion.two,
+                  context,
+                ),
                 const Gap(27),
-                buildMaterialButton(AiVersion.twoDynamicPredictions, context,),
-
+                buildMaterialButton(
+                  AiVersion.twoDynamicProperties,
+                  context,
+                ),
               ],
             ),
             const Gap(12),
-        ValueListenableBuilder<String>(
-          valueListenable: message,
-          builder: (_, value, __) => Text(value,
-            style: Style.bodyTextDesktop.copyWith(
-              color: Colors.red,
+            ValueListenableBuilder<String>(
+              valueListenable: message,
+              builder: (_, value, __) => Text(
+                value,
+                style: Style.bodyTextDesktop.copyWith(
+                  color: Colors.red,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
-        )
-
           ],
         ),
       ),
     );
   }
 
+  /// Just a button refactored for this specific file
   MaterialButton buildMaterialButton(
-      AiVersion ai, BuildContext context) {
+    AiVersion ai,
+    BuildContext context,
+  ) {
     var generatedProperties = false;
     return MaterialButton(
-        elevation: 12,
-        hoverElevation: 24,
-        hoverColor: Colors.black,
-        color: Colors.blueAccent,
-        height: MediaQuery.sizeOf(context).width > 500 ? 60 : 50,
-        minWidth: MediaQuery.sizeOf(context).width > 500 ? 100 : 80,
-        shape: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              16,
-            ),
-          ),
-          borderSide: BorderSide(
-            width: 0,
-            color: Colors.lightBlueAccent,
+      elevation: 12,
+      hoverElevation: 24,
+      hoverColor: Colors.black,
+      color: Colors.blueAccent,
+      height: MediaQuery.sizeOf(context).width > 500 ? 60 : 50,
+      minWidth: MediaQuery.sizeOf(context).width > 500 ? 100 : 80,
+      shape: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(
+            16,
           ),
         ),
-        onPressed: () async {
-          aiDecider.aiVersion = ai;
-          if(ai == AiVersion.one)
-            {
-              generatedProperties = properties.generatePropertiesV1();
-            }
-          else if (ai == AiVersion.two)
-          {
-            generatedProperties = properties.generatePropertiesV2();
+        borderSide: BorderSide(
+          width: 0,
+          color: Colors.lightBlueAccent,
+        ),
+      ),
+      onPressed: () async {
+        aiDecider.aiVersion = ai;
+        if (ai == AiVersion.one) {
+          generatedProperties = properties.generatePropertiesV1();
+        } else if (ai == AiVersion.two) {
+          generatedProperties = properties.generatePropertiesV2();
+        } else {
+          generatedProperties = await properties.generatePropertiesDynamic();
+        }
+        if (!generatedProperties) {
+          message.value =
+              "Couldn't generate properties, try a different version";
+        } else {
+          if (context.mounted) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute<Screen>(
+                builder: (context) {
+                  return Screen.build(
+                    context,
+                    desktopScreen: DesktopScreen1(properties),
+                    mobileScreen: MobileScreen1(properties),
+                  );
+                },
+              ),
+            );
           }
-          else
-            {
-              generatedProperties = await properties.generatePropertiesDynamic();
-            }
-          if(!generatedProperties)
-            {
-              message.value =
-                'Couldn\'t generate properties, try a different version';
-            }
-          else
-          {
-          Navigator.push(
-            context,
-            MaterialPageRoute<Screen>(
-              builder: (context) {
-                return Screen(
-                    desktop: DesktopScreen1(properties),
-                    mobile: MobileScreen1(properties));
-              },
-            ),
-          );
-          }
-        },
-        child: Text(
-          ai == AiVersion.twoDynamicPredictions ? 'two+' : ai.name,
-          style: Style.buttonTextDesktop.copyWith(
-            color: Colors.white,
-          ),
-        ));
+        }
+      },
+      child: Text(
+        ai == AiVersion.twoDynamicProperties ? 'two+' : ai.name,
+        style: Style.buttonTextDesktop.copyWith(
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 }

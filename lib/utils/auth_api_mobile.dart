@@ -7,7 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
 
-class AuthApiMobile extends AuthApiv2 {
+/// Mobile version of the AuthApi
+class AuthApiMobile extends AuthApiV2 {
+  /// constructor requiring the main endpoint url
   AuthApiMobile() {
     if (url == '') {
       throw ArgumentError('The application on mobile'
@@ -27,11 +29,11 @@ class AuthApiMobile extends AuthApiv2 {
     if(kDebugMode) {
       print(response.body);
     }
-    AuthApiv2.statusCodeParser(response);
+    AuthApiV2.statusCodeParser(response);
     final data = jsonDecode(response.body) as Map<String?, dynamic>;
     final jwtToken = data['jwtToken'] as String?;
     if(jwtToken == null) {
-      throw ServerException('We didn\'t receive a login token from the server');
+      throw ServerException("We didn't receive a login token from the server");
     }
     final result = groupsFrom(jwtToken);
     //We don't want to write to storage if it is an admin for now..
@@ -44,12 +46,12 @@ class AuthApiMobile extends AuthApiv2 {
         key: 'jwtToken',
         value: jwtToken,
       );
-    } catch (e, st) {
+    } on Exception {
       if (kDebugMode) {
         print('ERROR _storage.write method (because its an http web)');
       }
     }
-    //mobile specific behaviour
+    ///mobile specific behaviour
     await _getAndStoreRt(response);
     return result;
   }
@@ -73,7 +75,7 @@ class AuthApiMobile extends AuthApiv2 {
     }
     if (refreshToken == null) {
       throw UnauthorizedException(
-          'No refresh token in the response from server');
+          'No refresh token in the response from server',);
     }
     if (kDebugMode) {
       print('saving the RT: $refreshToken');
@@ -102,12 +104,14 @@ class AuthApiMobile extends AuthApiv2 {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'refreshToken': rt}),
     );
-    AuthApiv2.statusCodeParser(response); //throws exception on 4xx and 5xx
+    AuthApiV2.statusCodeParser(response); //throws exception on 4xx and 5xx
     final data = jsonDecode(response.body) as Map<String, dynamic>;
     final jwtToken = data['jwtToken'] as String?;
     //The browser automatically sets a cookie for refresh parameter in web
     if (jwtToken == null) {
-      throw ServerException("Didn't receive a JWT access token from the server");
+      throw ServerException(
+          "Didn't receive a JWT access token from the server",
+      );
     }
     await storage.write(
       key: 'jwtToken',
@@ -130,12 +134,12 @@ class AuthApiMobile extends AuthApiv2 {
     if (Jwt.isExpired(token)) {
             final refreshTokenExpiry = await storage.read(key: 'expiry') ??
                 DateTime.now().toIso8601String();
-            DateTime rte = DateTime.tryParse(refreshTokenExpiry)!;
+            final rte = DateTime.tryParse(refreshTokenExpiry)!;
             if (rte.compareTo(DateTime.now()) > 0) {
                 try {
                   await refresh();
                   return true;
-                } on UnauthorizedException catch (e) {
+                } on UnauthorizedException {
                   return false;
                 }
             } else {
@@ -160,7 +164,7 @@ class AuthApiMobile extends AuthApiv2 {
       headers: {'Content-Type': 'application/json'},
       body: body,
     );
-    AuthApiv2.statusCodeParser(response);
+    AuthApiV2.statusCodeParser(response);
   }
 
   @override

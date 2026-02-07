@@ -1,10 +1,7 @@
-import 'dart:ui';
-
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:comfortex_ai/layout/ui_components/common/MyCustomScrollBehavior.dart';
+import 'package:comfortex_ai/layout/ui_components/common/my_custom_scroll_behavior.dart';
 import 'package:comfortex_ai/layout/ui_components/common/title_widget.dart';
 import 'package:comfortex_ai/model/Properties_v2.dart';
-
 import 'package:comfortex_ai/utils/style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +11,9 @@ import 'package:google_fonts/google_fonts.dart';
 ///The widget on the bottom of the DesktopScreen1.
 class BottomWidget extends StatefulWidget {
   ///Default constructor for the BottomWidget.
-  BottomWidget(this.properties, {super.key});
-  PropertiesV2 properties;
+  const BottomWidget(this.properties, {super.key});
+  ///Properties carried from the previous widget.
+  final PropertiesV2 properties;
 
   @override
   State<BottomWidget> createState() => _BottomWidgetState();
@@ -37,6 +35,8 @@ class _BottomWidgetState extends State<BottomWidget> {
 
   @override
   Widget build(BuildContext context) {
+    /// Complex Layout which helps the app stay responsive with different screen
+    /// sizes
     return LayoutBuilder(
       builder: (context, restrict) {
         final width = restrict.maxWidth;
@@ -50,7 +50,7 @@ class _BottomWidgetState extends State<BottomWidget> {
               // Check if the event is a scroll event.
               if (pointerSignal is PointerScrollEvent) {
                 // Get the vertical scroll amount from the mouse wheel.
-                final double scrollAmount = pointerSignal.scrollDelta.dy;
+                final scrollAmount = pointerSignal.scrollDelta.dy;
                 // Manually move the horizontal scroll view by that amount.
                 scroller.jumpTo(
                   scroller.offset + scrollAmount / 3,
@@ -98,7 +98,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                                   scroller.animateTo(width / 3,
                                       duration:
                                           const Duration(milliseconds: 300),
-                                      curve: Curves.linear);
+                                      curve: Curves.linear,);
                                 }
                               });
                             }),
@@ -112,8 +112,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                             child: _buildFlexibleRadioButtons(
                                 widget.properties.layersList,
                                 <String>[
-                                  'two', 'Two'
-                                  //, 'Three'
+                                  'two', 'Two', 'Three',
                                 ],
                                 widget.properties.layers,
                                 (newValue) {
@@ -125,7 +124,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                                   scroller.animateTo(width / 3.2,
                                       duration:
                                           const Duration(milliseconds: 300),
-                                      curve: Curves.linear);
+                                      curve: Curves.linear,);
                                 }
                               });
                             }),
@@ -156,7 +155,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                           Flexible(
                             child: _buildFlexibleRadioButtons(
                               widget.properties.workIntensityList,
-                              ['low', 'high', 'Light', 'Heavy',],
+                              ['low', 'high', 'High', 'Light', 'Heavy',],
                               widget.properties.workIntensity,
                               (newValue) {
                                 setState(() {
@@ -224,8 +223,8 @@ class _BottomWidgetState extends State<BottomWidget> {
                             child: _buildSlider(
                               'Temperature (°C)',
                               widget.properties.temperature!,
-                              widget.properties.min_temperature,
-                              widget.properties.max_temperature,
+                              widget.properties.minTemperature,
+                              widget.properties.maxTemperature,
                               (newValue) {
                                 setState(() {
                                   widget.properties.temperature =
@@ -238,8 +237,8 @@ class _BottomWidgetState extends State<BottomWidget> {
                             child: _buildSlider(
                               'Humidity (%)',
                               widget.properties.humidity!,
-                              widget.properties.min_humidity,
-                              widget.properties.max_humidity,
+                              widget.properties.minHumidity,
+                              widget.properties.maxHumidity,
                               (newValue) {
                                 setState(() {
                                   widget.properties.humidity = newValue.round();
@@ -269,7 +268,7 @@ class _BottomWidgetState extends State<BottomWidget> {
     ValueChanged<double> onChanged,
   ) {
     return Column(
-      //TODO the 3rd column text is going down how to fix it?
+      //TODO(Hash): resolved -- the 3rd column text is going down how to fix it?
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -327,7 +326,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                   dense: true,
                   visualDensity: const VisualDensity(
                       horizontal: VisualDensity.minimumDensity,
-                      vertical: VisualDensity.minimumDensity),
+                      vertical: VisualDensity.minimumDensity,),
                   contentPadding: EdgeInsets.zero,
                   title: Text(
                     val.toLowerCase(),

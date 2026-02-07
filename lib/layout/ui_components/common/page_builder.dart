@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:comfortex_ai/layout/ui_components/common/img_container.dart';
 import 'package:comfortex_ai/layout/screens/desktop_screen_1.dart';
 import 'package:comfortex_ai/layout/screens/garment_properties_screen.dart';
 import 'package:comfortex_ai/layout/screens/screen.dart';
+import 'package:comfortex_ai/layout/ui_components/common/img_container.dart';
 import 'package:comfortex_ai/model/Properties_v2.dart';
 import 'package:comfortex_ai/utils/assets.dart';
 import 'package:comfortex_ai/utils/file_listing.dart';
@@ -88,7 +88,8 @@ class _PageBuilderState extends State<PageBuilder> {
   ///setState and thus updating screen.
   Future<void> getAssets() async {
     final resultImgAssets = await listAssets(
-        '${Assets.TEXTILES_PATH}${widget.properties.shirtType!.name}/');
+      '${Assets.TEXTILES_PATH}${widget.properties.shirtType!.name}/',
+    );
     final resultTextLoader = await parseJson();
     setState(() {
       _currentPage = 0;
@@ -163,10 +164,10 @@ class _PageBuilderState extends State<PageBuilder> {
   ///Its result is returned to be used in PageView.
   List<Widget> _loadTextiles(int page) {
     final int imgIndex;
-    List<Widget> result = [];
+    final result = <Widget>[];
     if (widget.mobileWidget) {
       imgIndex = page * 4;
-      for (int i = 0; i < 4; i += 2) {
+      for (var i = 0; i < 4; i += 2) {
         final img1 = _textiles.elementAtOrNull(imgIndex + i);
         final img2 = _textiles.elementAtOrNull(imgIndex + i + 1);
         final fabricNum = int.tryParse(img1?.split('_')[1] ?? '0');
@@ -175,58 +176,66 @@ class _PageBuilderState extends State<PageBuilder> {
                         ?['composition']
                     .toString() ??
                 '';
-        result.add(Expanded(
-          child: Row(
-            children: [
-              Flexible(
-                child: ImgContainer(
-                  selected: widget.properties.material == description,
-                  onTap: () async {
-                    widget.setDescription(description);
-                    widget.properties.fabricNum = fabricNum;
-                    await Future.delayed(Duration(milliseconds: 500), () {});
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<GarmentPropertiesScreen>(
-                        builder: (context) {
-                          return Screen(
-                            desktop: DesktopScreen1(widget.properties),
-                            mobile: GarmentPropertiesScreen(
-                              properties: widget.properties,
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  child: displayItem(
-                    img: img1,
-                    img2: img2,
-                    description: description,
+        result.add(
+          Expanded(
+            child: Row(
+              children: [
+                Flexible(
+                  child: ImgContainer(
+                    selected: widget.properties.material == description,
+                    onTap: () async {
+                      widget.setDescription(description);
+                      widget.properties.fabricNum = fabricNum;
+                      await Future.delayed(
+                        const Duration(milliseconds: 500),
+                        () {},
+                      );
+                      if(mounted) {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute<GarmentPropertiesScreen>(
+                            builder: (context) {
+                              return Screen.build(
+                                context,
+                                desktopScreen: DesktopScreen1(widget.properties),
+                                mobileScreen: GarmentPropertiesScreen(
+                                  properties: widget.properties,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    },
+                    child: displayItem(
+                      img: img1,
+                      img2: img2,
+                      description: description,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ));
+        );
       }
     } else {
       imgIndex = page * 8;
-      for (int i = 0; i < 8; i += 4) {
-        String? img1 = _textiles.elementAtOrNull(imgIndex + i);
-        String? img2 = _textiles.elementAtOrNull(imgIndex + i + 1);
-        String? img3 = _textiles.elementAtOrNull(imgIndex + i + 2);
-        String? img4 = _textiles.elementAtOrNull(imgIndex + i + 3);
+      for (var i = 0; i < 8; i += 4) {
+        final img1 = _textiles.elementAtOrNull(imgIndex + i);
+        final img2 = _textiles.elementAtOrNull(imgIndex + i + 1);
+        final img3 = _textiles.elementAtOrNull(imgIndex + i + 2);
+        final img4 = _textiles.elementAtOrNull(imgIndex + i + 3);
         final fabricNum =
             img1 != null ? int.tryParse(img1.split('_')[1]) ?? 0 : -1;
         final fabricNum2 =
             img3 != null ? int.tryParse(img3.split('_')[1]) ?? 0 : -1;
-        String? description =
+        final description =
             _materialsDescriptions?[img1?.split('_').sublist(0, 2).join(' ')]
                         ?['composition']
                     .toString() ??
                 '';
-        String? description2 =
+        final description2 =
             _materialsDescriptions?[img3?.split('_').sublist(0, 2).join(' ')]
                         ?['composition']
                     .toString() ??
@@ -241,7 +250,6 @@ class _PageBuilderState extends State<PageBuilder> {
                     onTap: () {
                       widget.setDescription(description);
                       widget.properties.fabricNum = fabricNum;
-                      //TODO: setstate?
                     },
                     child: displayItem(
                       img: img1,

@@ -33,8 +33,7 @@ class ImgContainer extends StatelessWidget {
               border: _selected
                   ? Border.all(width: 3, color: Colors.lightBlue)
                   : null,
-              borderRadius:
-                  BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(2),
             ),
             child: _child,
           ),

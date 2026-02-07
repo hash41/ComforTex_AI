@@ -1,0 +1,2 @@
+rm -rf $HOME/Development/java_ee/stage/comfortex_ai/src/main/webapp/flutter-app/*
+cp -R ./build/web/* $HOME/Development/java_ee/stage/comfortex_ai/src/main/webapp/flutter-app/

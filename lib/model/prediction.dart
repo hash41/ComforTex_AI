@@ -1,7 +1,8 @@
 import 'package:comfortex_ai/exception/server_exception.dart';
 import 'package:flutter/material.dart';
 
-///This class represents a prediction model based on conditions in Properties class.
+/// This class represents a prediction model based on conditions in Properties
+/// class.
 class Prediction {
   /// Default constructor for the Prediction class.
   Prediction({
@@ -18,21 +19,23 @@ class Prediction {
 
   /// Creates a Prediction object from a JSON map.
   Prediction.fromJson(Map<String, dynamic> json) {
-
     _thermal = json['thermal_probability']?.toString();
     _moisture = json['moisture_probability']?.toString();
     _comfort = json['comfort_probability']?.toString();
     //_comfortAnalysis = json['comfortAnalysis'].toString();
     final factors = json['features_contribution']?.toString();
-    if(_comfort ==null || _thermal == null || _moisture == null || factors == null) {
-      throw ServerException('Couldn\'t do AI inference on the server');
+    if (_comfort == null ||
+        _thermal == null ||
+        _moisture == null ||
+        factors == null) {
+      throw ServerException("Couldn't do AI inference on the server");
     }
-    for (String f in factors.split('\n')) {
+    for (final f in factors.split('\n')) {
       if (f.isNotEmpty) {
         final l = f.split(':');
-        List<String> parsedValues = l[1].split(' - ');
+        final parsedValues = l[1].split(' - ');
         Icon icon;
-        if (parsedValues[1] != null && parsedValues[1].contains('increase')) {
+        if (parsedValues[1].contains('increase')) {
           icon = const Icon(
             Icons.arrow_upward_sharp,
             color: Colors.green,
@@ -56,35 +59,37 @@ class Prediction {
     }
   }
 
+  /// Attributes
   String? _thermal;
   String? _moisture;
   String? _comfort;
   //String? _comfortAnalysis;
   Map<String, List<dynamic>>? _keyFactors = {};
 
+  ///Setters + getters (null is allowed for now)
+
   set thermal(String? value) {
-    thermal = value;
+    _thermal = value;
   }
 
+  /// getter for the private field [_thermal]
   String? get thermal {
     return _thermal;
   }
-
+  /// Setter for the field [_moisture]
   set moisture(String? value) {
-    moisture = value;
+    _moisture = value;
   }
-
+  /// getter for the private field [_moisture]
   String? get moisture {
     return _moisture;
   }
 
+  /// /// getter for the private field [_comfort]
   set comfort(String? value) {
-    comfort = value;
+    _comfort = value;
   }
 
-  String? get comfort {
-    return _comfort;
-  }
 
   // set comfortAnalysis(String? value) {
   //   comfortAnalysis = value;
@@ -93,10 +98,18 @@ class Prediction {
   //   return _comfortAnalysis;
   // }
   //
-  set keyFactors(Map<String, List<dynamic>>? value) {
-    keyFactors = value;
+
+  /// getter for the private field [_comfort]
+  String? get comfort {
+    return _comfort;
   }
 
+  /// Setter for the private field [_keyFactors]
+  set keyFactors(Map<String, List<dynamic>>? value) {
+    _keyFactors = value;
+  }
+
+  /// getter for the private field [_keyFactors]
   Map<String, List<dynamic>>? get keyFactors {
     return _keyFactors;
   }

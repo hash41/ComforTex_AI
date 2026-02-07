@@ -1,45 +1,40 @@
-import 'dart:io' show HttpOverrides, Platform;
+import 'dart:io' show HttpOverrides;
 
 import 'package:comfortex_ai/exception/bad_request_exception.dart';
 import 'package:comfortex_ai/exception/endpoint_not_found_exception.dart';
 import 'package:comfortex_ai/exception/many_requests_exception.dart';
 import 'package:comfortex_ai/exception/server_exception.dart';
-import 'package:comfortex_ai/layout/screens/desktop_login_screen.dart';
-import 'package:comfortex_ai/layout/screens/desktop_screen_1.dart';
 import 'package:comfortex_ai/layout/screens/desktop_welcome_screen.dart';
-import 'package:comfortex_ai/layout/screens/mobile_screen_1.dart';
 import 'package:comfortex_ai/layout/screens/mobile_welcome_screen.dart';
 import 'package:comfortex_ai/layout/screens/screen.dart';
 import 'package:comfortex_ai/layout/screens/select_ai_screen.dart';
-import 'package:comfortex_ai/model/Properties_v2.dart';
-import 'package:comfortex_ai/model/properties.dart';
 import 'package:comfortex_ai/utils/auth_api_mobile.dart';
 import 'package:comfortex_ai/utils/auth_api_web.dart';
 import 'package:comfortex_ai/utils/my_http_overrides.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 
 ///a [main] function to start and stop the app.
-///TODO: need to update the app for 4k resolution...
+//TODO(Hash): need to test and update the app for 4k resolution...
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global =
-      MyHttpOverrides(); //Temporary override, TODO: NOT FOR PRODUCTION
+      MyHttpOverrides(); //Temporary override, TODO(Hash): NOT FOR PRODUCTION
   var loggedIn = false;
   try {
-    ///TODO: the refreshToken on web will not work in development
-    ///TODO: because we are on local host but the backend is on "mac.lan"
-    if(kIsWeb) {
-    loggedIn = await AuthApiWeb().isLoggedIn();
+    //TODO(Hash): the refreshToken on web will not work in development
+    //TODO(Hash): because we are on local host but the backend is on "mac.lan"
+    if (kIsWeb) {
+      loggedIn = await AuthApiWeb().isLoggedIn();
     } else {
       loggedIn = await AuthApiMobile().isLoggedIn();
     }
-  } on ManyRequestsException catch (e) {
+  } on ManyRequestsException {
     if (kDebugMode) {
       print(
-        'We log user out here because he reached allowed connections limit',);
+        'We log user out here because he reached allowed connections limit',
+      );
     }
     loggedIn = false;
   } on ServerException catch (e) {
@@ -51,7 +46,7 @@ void main() async {
     if (kDebugMode) {
       print(e.message);
     }
-  } on ClientException catch (e) {
+  } on ClientException {
     if (kDebugMode) {
       print('client exception');
     }
@@ -60,14 +55,13 @@ void main() async {
     if (kDebugMode) {
       print(e);
     }
-  }
-  catch (e) {
+  } on Exception catch (e) {
     if (kDebugMode) {
       print('An exception of a new sort in main:');
       print(e);
     }
   }
-  runApp(App(loggedIn));
+  runApp(App(loggedIn: loggedIn));
 }
 
 ///A stateless widget to call and display the screens based on screenWidth.
@@ -75,8 +69,8 @@ void main() async {
 ///version of the app is not implemented.
 class App extends StatelessWidget {
   ///Default constructor for the App Widget.
-  App(bool loggedIn, {super.key}) : _loggedIn = loggedIn;
-  late bool _loggedIn;
+  const App({bool loggedIn = false, super.key}) : _loggedIn = loggedIn;
+  final bool _loggedIn;
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +78,10 @@ class App extends StatelessWidget {
       title: 'ComforTex AI',
       home: _loggedIn
           ? SelectAiScreen()
-          : Screen(
-              desktop: const DesktopWelcomeScreen(),
-              mobile: const MobileWelcomeScreen(),
-              // desktop: DesktopScreen1(properties),
-              // mobile: MobileScreen1(properties),
+          : Screen.build(
+              context,
+              desktopScreen: const DesktopWelcomeScreen(),
+              mobileScreen: const MobileWelcomeScreen(),
             ),
       theme: ThemeData.light().copyWith(
         inputDecorationTheme: InputDecorationTheme(
@@ -98,11 +91,11 @@ class App extends StatelessWidget {
               const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(width: 1.5, color: Colors.black),
+            borderSide: const BorderSide(width: 1.5),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(width: 1.5, color: Colors.black),
+            borderSide: const BorderSide(width: 1.5),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
@@ -127,10 +120,11 @@ class App extends StatelessWidget {
             color: Colors.black,
           ),
         ),
-        textTheme: TextTheme(
-            displayLarge: TextStyle(
-          fontFamily: 'Arial',
-        ),),
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(
+            fontFamily: 'Arial',
+          ),
+        ),
       ),
     );
   }

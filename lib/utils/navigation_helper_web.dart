@@ -1,8 +1,11 @@
 import 'package:web/web.dart' as web;
 
-void redirectToAdminboard() {
+/// Only allow admin to access their endpoint if the platform is [web]
+void redirectToAdminBoard() {
   // This uses the browser's native API to change the page location.
   final origin = web.window.location.origin;
-  web.window.location.href = '$origin/comfortex_admin';//under the same hood we use relative path..
-  //but when launching through android studio its a differrent server, hence different host..
+  // under the same hood we use relative path..
+  web.window.location.href = '$origin/comfortex_admin';
+  // but when launching through android studio its a different server, hence
+  // different host..
 }

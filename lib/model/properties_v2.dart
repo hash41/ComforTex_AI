@@ -4,18 +4,31 @@ import 'package:comfortex_ai/model/prediction.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-enum ShirtType { polo, t_shirt }
+/// ShirtType can be an enum
+enum ShirtType {
+  /// POLO
+  polo,
 
+  /// T-SHIRT has to be in the non camelcase format because the backend expects
+  /// it this way
+  t_shirt,
+}
+
+/// Properties in a new version, instead of using enum we are initializing Lists
+///
 class PropertiesV2 {
-
+  /// Constructor capable of helping with the {fromEnvironment} variables
+  /// required for further networking. Although the Properties class is not
+  /// mainly about networking
   PropertiesV2() {
-    const base = const String.fromEnvironment('base_url');
-    bool _https = const bool.fromEnvironment('https', defaultValue: true);
-    final _prefix = _https ? 'https' : 'http';
-    String _url = base.isNotEmpty ? '$_prefix:\\' '\\$base' : '';
-    this._uri = Uri.parse('$_url/comfortex_ai/api/options');
+    const base = String.fromEnvironment('base_url');
+    const https = bool.fromEnvironment('https', defaultValue: true);
+    const prefix = https ? 'https' : 'http';
+    final url = base.isNotEmpty ? '$prefix:\\' '\\$base' : '';
+    _uri = Uri.parse('$url/comfortex_ai/api/options');
   }
 
+  ///Attributes
   ShirtType? _shirtType;
   String? _material;
   int? _fabricNum;
@@ -27,11 +40,20 @@ class PropertiesV2 {
   int? _temperature = 50;
   int? _humidity = 60;
   Prediction? _prediction;
-  int min_temperature = 0;
-  int max_temperature = 100;
-  int min_humidity = 30;
-  int max_humidity = 90;
 
+  /// minimum temperature helps with building the UI of the temperature slider
+  int minTemperature = 0;
+
+  /// maximum temperature helps with building the UI of the temperature slider
+  int maxTemperature = 100;
+
+  /// minimum humidity helps with building the UI of the temperature slider
+  int minHumidity = 30;
+
+  /// maximum humidity helps with building the UI of the temperature slider
+  int maxHumidity = 90;
+
+  /// List of property group -> values
   late List<String> _fitGroup;
   late List<String> _workIntensityGroup;
   late List<String> _purposeGroup;
@@ -39,9 +61,11 @@ class PropertiesV2 {
   late List<String> _scenarioGroup;
   late List<int> _temperatureGroup;
   late List<int> _humidityGroup;
-  http.Response? response;
+  late http.Response? _response;
   late Uri _uri;
 
+  /// Verify that a null values doesn't pass into later stages when we need to
+  /// send these properties to backend
   bool checkProperties() {
     if (_shirtType == null ||
         _material == null ||
@@ -56,23 +80,41 @@ class PropertiesV2 {
     return true;
   }
 
+  ///JSON representation of {@Properties}
   Map<String, String?> toJson() {
-    return {
-      'fabricNum': fabricNum?.toString(),
-      'fit': fit,
-      'layers': layers?.toLowerCase() == 'one' ? '1' :
-      layers?.toLowerCase() == 'two' ? '2'
-          : '3',
-      'workIntensity': workIntensity,
-      'purpose': purpose,
-      'scenario': scenario,
-      'temperature': temperature.toString(),
-      'humidity': humidity.toString()
-    };
+    final propertiesMap = <String, String?>{};
+    propertiesMap['Fabric_id'] = fabricNum?.toString();
+    propertiesMap['Garment_fit'] = fit;
+    if (layers == 'one' || layers == 'One') {
+      propertiesMap['Garment_layer'] = '1';
+    } else if (layers == 'two' || layers == 'Two') {
+      propertiesMap['Garment_layer'] = '2';
+    } else {
+      propertiesMap['Garment_layer'] = '3';
+    }
+    propertiesMap['Work_intensity'] = workIntensity;
+    propertiesMap['Garment_purpose'] = purpose;
+    propertiesMap['Garment_scenario'] = scenario;
+    propertiesMap['Env_temperature'] = temperature.toString();
+    propertiesMap['Env_humidity'] = humidity.toString();
+    return propertiesMap;
+    // OR
+    // return {
+    //   'Fabric_id': fabricNum?.toString(),
+    //   'Garment_fit': fit,
+    //   'Garment_layer': layers == 'one' || layers == 'One'? '1' :
+    //   layers == 'two' || layers == 'Two' ? '2'
+    //       : '3',
+    //   'Work_intensity': workIntensity,
+    //   'Garment_purpose': purpose,
+    //   'Garment_scenario': scenario,
+    //   'Env_temperature': temperature.toString(),
+    //   'Env_humidity': humidity.toString(),
+    // };
   }
 
-
-  //PropertiesV1 in the backend are in lowercase, im aware of it
+  ///PropertiesV1 in the backend are in lowercase, im aware of it
+  ///Properties values generator
   bool generatePropertiesV1() {
     try {
       _fitGroup = ['fit', 'loose'];
@@ -85,20 +127,21 @@ class PropertiesV2 {
       _layersGroup = ['one', 'two'];
       _scenarioGroup = ['indoors', 'outdoors'];
       _temperatureGroup = [23, 25];
-      min_temperature = _temperatureGroup[0];
-      max_temperature = _temperatureGroup[1];
+      minTemperature = _temperatureGroup[0];
+      maxTemperature = _temperatureGroup[1];
       _temperature = (_temperatureGroup[0] + _temperatureGroup[1]) ~/ 2;
       _humidityGroup = [50, 65];
       _humidity = (_humidityGroup[0] + _humidityGroup[1]) ~/ 2;
-      min_humidity = _humidityGroup[0];
-      max_humidity = _humidityGroup[1];
+      minHumidity = _humidityGroup[0];
+      maxHumidity = _humidityGroup[1];
       return true;
-    } catch (e) {
+    } on Exception {
       return false;
     }
   }
 
   //These PropertiesV2 have first letter in uppercase format, im aware of it
+  ///Properties values generator
   bool generatePropertiesV2() {
     try {
       _fitGroup = ['Tight', 'Loose'];
@@ -111,23 +154,25 @@ class PropertiesV2 {
       _layersGroup = ['One', 'Two', 'Three'];
       _scenarioGroup = ['Indoors', 'Outdoors'];
       _temperatureGroup = [23, 25];
-      min_temperature = _temperatureGroup[0];
-      max_temperature = _temperatureGroup[1];
+      minTemperature = _temperatureGroup[0];
+      maxTemperature = _temperatureGroup[1];
       _temperature = (_temperatureGroup[0] + _temperatureGroup[1]) ~/ 2;
       _humidityGroup = [50, 65];
       _humidity = (_humidityGroup[0] + _humidityGroup[1]) ~/ 2;
-      min_humidity = _humidityGroup[0];
-      max_humidity = _humidityGroup[1];
+      minHumidity = _humidityGroup[0];
+      maxHumidity = _humidityGroup[1];
       return true;
-    } catch (e) {
+    } on Exception {
       return false;
     }
   }
 
+  /// Properties values generator
+  /// Dynamic
   Future<bool> generatePropertiesDynamic() async {
     try {
-      response = await http.get(_uri);
-      final result = json.decode(response!.body) as Map<String, dynamic>;
+      _response = await http.get(_uri);
+      final result = json.decode(_response!.body) as Map<String, dynamic>;
       //Convert from a unknown type to map of key String: value List<String>
       //Doesn't function on web..
       result.forEach((key, value) {
@@ -142,111 +187,135 @@ class PropertiesV2 {
       var temp = result['temperature'] as List<String>;
       _temperatureGroup = temp.map(int.parse).toList();
       _temperature = (_temperatureGroup[0] + _temperatureGroup[1]) ~/ 2;
-      min_temperature = _temperatureGroup[0];
-      max_temperature = _temperatureGroup[1];
+      minTemperature = _temperatureGroup[0];
+      maxTemperature = _temperatureGroup[1];
       temp = result['humidity'] as List<String>;
       _humidityGroup = temp.map(int.parse).toList();
       _humidity = (_humidityGroup[0] + _humidityGroup[1]) ~/ 2;
-      min_humidity = _humidityGroup[0];
-      max_humidity = _humidityGroup[1];
+      minHumidity = _humidityGroup[0];
+      maxHumidity = _humidityGroup[1];
       return true;
-    } catch (e) {
-      if(kDebugMode) {
+    } on Exception catch (e) {
+      if (kDebugMode) {
         print(e);
       }
       return false;
     }
   }
 
+  ///A list representation of the values of the properties
   List<dynamic> getProperties() {
-      return [
-        _shirtType?.name,
-        _material,
-        _fabricNum,
-        _fit,
-        _layers,
-        _workIntensity,
-        _purpose,
-        _scenario,
-        _temperature,
-        _humidity
-      ];
+    return [
+      _shirtType?.name,
+      _material,
+      _fabricNum,
+      _fit,
+      _layers,
+      _workIntensity,
+      _purpose,
+      _scenario,
+      _temperature,
+      _humidity,
+    ];
   }
 
+  /// Getter of the [_fitGroup] which is the values under the key fit
   List<String> get fitList {
     return _fitGroup;
   }
+
+  /// Getter of the [_workIntensityGroup] which is the values under the key
+  /// workIntensity
   List<String> get workIntensityList {
     return _workIntensityGroup;
   }
+
+  /// Getter of the [_purposeGroup] which is the values under the key purpose
   List<String> get purposeList {
     return _purposeGroup;
   }
+
+  /// Getter of the [_layersGroup] which is the values under the key layers
   List<String> get layersList {
     return _layersGroup;
   }
+
+  /// Getter of the [_scenarioGroup] which is the values under the key scenario
   List<String> get scenarioList {
     return _scenarioGroup;
   }
+
+  /// Getter of the [_temperatureGroup] which is the values under the key
+  /// min-max temperature
   List<int> get temperatureList {
     return _temperatureGroup;
   }
+
+  /// Getter of the [_humidityGroup] which is the values under the key humidity
+  /// min-max
   List<int> get humidityList {
     return _humidityGroup;
   }
 
-  //We will allow null because its a nullable ..
-
-  set material(String? material) {
-    _material = material;
-  }
-
-  String? get material {
-    return _material;
-  }
-
-  set fabricNum(int? fabricNum) {
-    _fabricNum = fabricNum;
-  }
-
+  ///Getter of the [_fabricNum] value
   int? get fabricNum {
     return _fabricNum;
   }
 
+  ///Getter of the [_shirtType] value
   ShirtType? get shirtType {
     return _shirtType;
   }
 
+  ///Getter of the [_fit] value
   String? get fit {
     return _fit;
   }
 
+  ///Getter of the [_layers] value
   String? get layers {
     return _layers;
   }
 
+  ///Getter of the [_workIntensity] value
   String? get workIntensity {
     return _workIntensity;
   }
 
+  ///Getter of the [_purpose] value
   String? get purpose => _purpose;
 
+  ///Getter of the [_scenario] value
   String? get scenario => _scenario;
 
+  ///Getter of the [_temperature] value
   int? get temperature {
     return _temperature;
   }
 
+  ///Getter of the [_humidity] value
   int? get humidity {
     return _humidity;
   }
 
-  PropertiesV2 get properties {
-    return this;
-  }
-
+  /// Getter of the [_prediction] object
   Prediction? get prediction {
     return _prediction;
+  }
+
+  /// Getter of the [_material] value
+  String? get material {
+    return _material;
+  }
+  //We will allow null because its a nullable ..
+
+  ///Setters
+  set material(String? material) {
+    _material = material;
+  }
+
+  set fabricNum(int? fabricNum) {
+    _fabricNum = fabricNum;
   }
 
   set shirtType(ShirtType? shirtType) {
@@ -274,20 +343,20 @@ class PropertiesV2 {
   }
 
   set temperature(int? temperature) {
-    if (temperature != null && temperature < min_temperature) {
-      _temperature = min_temperature;
-    } else if (temperature != null && temperature > max_temperature) {
-      _temperature = max_temperature;
+    if (temperature != null && temperature < minTemperature) {
+      _temperature = minTemperature;
+    } else if (temperature != null && temperature > maxTemperature) {
+      _temperature = maxTemperature;
     } else {
       _temperature = temperature;
     }
   }
 
   set humidity(int? humidity) {
-    if (humidity != null && humidity > max_humidity) {
-      _humidity = max_humidity;
-    } else if (humidity != null && humidity < min_humidity) {
-      _humidity = min_humidity;
+    if (humidity != null && humidity > maxHumidity) {
+      _humidity = maxHumidity;
+    } else if (humidity != null && humidity < minHumidity) {
+      _humidity = minHumidity;
     } else {
       _humidity = humidity;
     }
@@ -297,6 +366,7 @@ class PropertiesV2 {
     _prediction = prediction;
   }
 
+  ///ToString override
   @override
   String toString() {
     String result;

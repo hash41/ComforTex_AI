@@ -9,15 +9,15 @@ import 'package:google_fonts/google_fonts.dart';
 class TitleWidget extends StatelessWidget {
   ///Constructor for the TitleWidget.
   const TitleWidget({
-    String? iconPath,
     required String title,
+    String? iconPath,
     bool isLandscape = false,
     bool isMobile = false,
     bool center = true,
     super.key,
-  }):  _title = title,
+  })  : _title = title,
         _iconPath = iconPath,
-        _isLandscape = isMobile ? isLandscape : false,
+        _isLandscape = isMobile && isLandscape,
         _isMobile = isMobile,
         _center = center;
 
@@ -33,15 +33,16 @@ class TitleWidget extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if(_iconPath!= null)  RotatedBox(
-            quarterTurns: 4,
-            child: Image.asset(
-              _iconPath,
-              fit: BoxFit.contain,
-              width: 36,
-              height: 36,
+          if (_iconPath != null)
+            RotatedBox(
+              quarterTurns: 4,
+              child: Image.asset(
+                _iconPath,
+                fit: BoxFit.contain,
+                width: 36,
+                height: 36,
+              ),
             ),
-          ),
           Flexible(
             child: RotatedBox(
               quarterTurns: 4,
@@ -50,8 +51,8 @@ class TitleWidget extends StatelessWidget {
                 overflow: TextOverflow.clip,
                 maxLines: 2,
                 style: GoogleFonts.roboto(
-    textStyle: Style.mobileTitle,
-    ),
+                  textStyle: Style.mobileTitle,
+                ),
               ),
             ),
           ),
@@ -59,24 +60,27 @@ class TitleWidget extends StatelessWidget {
       );
     }
     return Row(
-      mainAxisAlignment: _center? MainAxisAlignment.center: MainAxisAlignment.start,
+      mainAxisAlignment:
+          _center ? MainAxisAlignment.center : MainAxisAlignment.start,
       children: [
-        if(_iconPath != null)
-          ...[Image.asset(
+        if (_iconPath != null) ...[
+          Image.asset(
             _iconPath,
             fit: BoxFit.scaleDown,
-            width: _isMobile ? 36:48,
-            height: _isMobile ? 36:48,
+            width: _isMobile ? 36 : 48,
+            height: _isMobile ? 36 : 48,
           ),
-          const Gap (
+          const Gap(
             4,
-          ),],
+          ),
+        ],
         Flexible(
           child: Text(
             _title,
-            style:
-            GoogleFonts.roboto(
-              textStyle:  _isMobile ? Style.mobileTitle.copyWith(height: 0) : Style.desktopTitle,
+            style: GoogleFonts.roboto(
+              textStyle: _isMobile
+                  ? Style.mobileTitle.copyWith(height: 0)
+                  : Style.desktopTitle,
             ),
             softWrap: true,
           ),

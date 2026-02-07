@@ -7,15 +7,18 @@ import 'package:comfortex_ai/layout/ui_components/common/top_bar.dart';
 import 'package:comfortex_ai/utils/auth_api_mobile.dart';
 import 'package:comfortex_ai/utils/auth_api_v2.dart';
 import 'package:comfortex_ai/utils/auth_api_web.dart';
+import 'package:comfortex_ai/utils/navigation_helper.dart' as navigation_helper;
 import 'package:comfortex_ai/utils/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:comfortex_ai/utils/navigation_helper.dart' as navigation_helper;
 import 'package:http/http.dart';
 
+///Mobile screen widget able to display multiple objects related to
+/// the login process
 class MobileLoginScreen extends StatefulWidget {
+  /// default constructor
   const MobileLoginScreen({super.key});
 
   @override
@@ -32,13 +35,13 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
   //We can add context and refactor this message.
   Future<void> submit() async {
     setState(() {
-    _buttonEnabled = false;
+      _buttonEnabled = false;
       _loggingIn = Colors.red;
       message = '';
     });
-    await Future.delayed(const Duration(milliseconds: 550),(){});
-    AuthApiv2 authApi;
-    if(kIsWeb) {
+    await Future.delayed(const Duration(milliseconds: 550), () {});
+    AuthApiV2 authApi;
+    if (kIsWeb) {
       authApi = AuthApiWeb();
     } else {
       authApi = AuthApiMobile();
@@ -58,9 +61,10 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
         final groups = await authApi.login(username, password);
         if (groups.contains('admin')) {
           try {
-            //For diversity i will keep this redirect.. It is implemented via different auth and a JSP interface..
-            navigation_helper.redirectToAdminboard();
-          } catch (e) {
+            //For diversity i will keep this redirect.. It is implemented via
+            // different auth and a JSP interface..
+            navigation_helper.redirectToAdminBoard();
+          } on Exception {
             setState(() {
               message = 'Admins login is done via web browsers';
             });
@@ -69,45 +73,50 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
           setState(() {
             _loggingIn = Colors.yellow.shade600;
           });
-          await Future.delayed(const Duration(milliseconds: 550),(){});
+          await Future.delayed(const Duration(milliseconds: 550), () {});
           setState(() {
             _loggingIn = Colors.green;
           });
-          await Future.delayed(const Duration(milliseconds: 550),(){});
-          await Navigator.push(
-            context,
-            PageRouteBuilder(
-                transitionDuration: const Duration(seconds: 2,),
-                reverseTransitionDuration: const Duration(seconds: 2,),
+          await Future.delayed(const Duration(milliseconds: 550), () {});
+          if (mounted) {
+            await Navigator.push(
+              context,
+              PageRouteBuilder<SelectAiScreen>(
+                transitionDuration: const Duration(
+                  seconds: 2,
+                ),
+                reverseTransitionDuration: const Duration(
+                  seconds: 2,
+                ),
                 pageBuilder: (_, __, ___) => SelectAiScreen(),
                 transitionsBuilder: (context, animation1, animation2, child) {
-                  final curved = CurvedAnimation(parent: animation1, curve: Curves.decelerate);
+                  final curved = CurvedAnimation(
+                      parent: animation1, curve: Curves.decelerate,);
                   return FadeTransition(
                     opacity: curved,
                     child: child,
                   );
-                }
-            ),
-          );
+                },
+              ),
+            );
+          }
         } else {
-          if(kDebugMode)
-            {
-          print('Backend error');
-            }
+          if (kDebugMode) {
+            print('Backend error');
+          }
         }
       } on UnauthorizedException catch (e) {
         setState(() {
           message = e.message;
         });
-        if(kDebugMode)
-          {
-        print(e);
-          }
+        if (kDebugMode) {
+          print(e);
+        }
       } on ManyRequestsException catch (e) {
         setState(() {
           message = e.message;
         });
-      }  on BadRequestException catch (e) {
+      } on BadRequestException {
         setState(() {
           message = "The request you've sent is not correct..";
         });
@@ -115,17 +124,14 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
         setState(() {
           message = e.message;
         });
-      }
-      on ClientException catch (e) {
+      } on ClientException {
         setState(() {
-          message = 'The connection to the server couldn\'t be established';
+          message = "The connection to the server couldn't be established";
         });
-      }
-      catch (e) {
-        if(kDebugMode)
-          {
-        print(e);
-          }
+      } on Exception catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
         setState(() {
           message =
               'Generic error, possible reasons:\n - Browser CORS issues \n'
@@ -146,11 +152,9 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: TopBar(
-          height: MediaQuery.of(context).orientation == Orientation.portrait ?
-              Style.topBarHeightPortrait
-            :
-              Style.topBarHeightLandscape
-          ,
+          height: MediaQuery.of(context).orientation == Orientation.portrait
+              ? Style.topBarHeightPortrait
+              : Style.topBarHeightLandscape,
         ),
         body: Padding(
           padding: const EdgeInsets.all(10),
@@ -187,7 +191,7 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
                   Flexible(
                     child: TextField(
                       maxLength: 16,
-                      onChanged: (String value) => username = value ?? '',
+                      onChanged: (String value) => username = value,
                       style: GoogleFonts.roboto(
                         textStyle: Style.bodyTextMobile,
                       ),
@@ -210,7 +214,7 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
                     style: GoogleFonts.roboto(
                       textStyle: Style.mobileSubtitle,
                     ),
-                  )),
+                  ),),
                   const Gap(16),
                   Flexible(
                     child: TextField(
@@ -219,7 +223,7 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
                       style: GoogleFonts.roboto(
                         textStyle: Style.bodyTextMobile,
                       ),
-                      onChanged: (String value) => password = value ?? '',
+                      onChanged: (String value) => password = value,
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.center,
                     ),
@@ -230,7 +234,8 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(_buttonEnabled ? '' : '··',
+                  Text(
+                    _buttonEnabled ? '' : '··',
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       color: _loggingIn,
@@ -252,7 +257,11 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
                         color: Colors.lightBlueAccent,
                       ),
                     ),
-                    onPressed: _buttonEnabled ? () async {await submit();} : () {},
+                    onPressed: _buttonEnabled
+                        ? () async {
+                            await submit();
+                          }
+                        : () {},
                     child: Text(
                       'Login',
                       style: GoogleFonts.roboto(
@@ -261,12 +270,13 @@ class _MobileLoginScreenState extends State<MobileLoginScreen> {
                       ),
                     ),
                   ),
-                  Text(_buttonEnabled ? '' : '··',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        color: _loggingIn,
-                        fontSize: 17,
-                      ),
+                  Text(
+                    _buttonEnabled ? '' : '··',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      color: _loggingIn,
+                      fontSize: 17,
+                    ),
                   ),
                 ],
               ),

@@ -13,9 +13,7 @@ import 'package:comfortex_ai/layout/screens/mobile_login_screen.dart';
 import 'package:comfortex_ai/layout/screens/mobile_results_screen.dart';
 import 'package:comfortex_ai/layout/screens/screen.dart';
 import 'package:comfortex_ai/layout/ui_components/common/top_bar.dart';
-import 'package:comfortex_ai/layout/ui_components/mobile/back_button.dart';
 import 'package:comfortex_ai/model/Properties_v2.dart';
-import 'package:comfortex_ai/model/properties.dart';
 import 'package:comfortex_ai/utils/Networking.dart';
 import 'package:comfortex_ai/utils/style.dart';
 import 'package:flutter/foundation.dart';
@@ -23,9 +21,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
+/// The waiting screen widget which can render on both mobile and desktop
 class WaitingScreen extends StatefulWidget {
-  PropertiesV2 properties;
-  WaitingScreen(this.properties, {super.key});
+  /// Almost a default constructor with the properties
+  const WaitingScreen(this.properties, {super.key});
+  /// Properties to pass to the results screen
+  final PropertiesV2 properties;
 
   @override
   State<WaitingScreen> createState() => _WaitingScreenState();
@@ -38,7 +39,7 @@ class _WaitingScreenState extends State<WaitingScreen>
   Widget? _leading;
 
   Future<void> getUseCase() async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
     try {
       final networking = Networking();
       await networking.httpGet(widget.properties);
@@ -47,25 +48,26 @@ class _WaitingScreenState extends State<WaitingScreen>
         _controller = null;
         await Navigator.pushReplacement(
           context,
-          PageRouteBuilder(
+          PageRouteBuilder<Screen>(
               transitionDuration: const Duration(
                 seconds: 2,
               ),
               reverseTransitionDuration: const Duration(
                 seconds: 2,
               ),
-              pageBuilder: (_, __, ___) => Screen(
-                    desktop: DesktopResultsScreen(widget.properties),
-                    mobile: MobileResultsScreen(widget.properties),
+              pageBuilder: (_, __, ___) => Screen.build(
+                context,
+                    desktopScreen: DesktopResultsScreen(widget.properties),
+                    mobileScreen: MobileResultsScreen(widget.properties),
                   ),
               transitionsBuilder: (context, animation1, animation2, child) {
                 final curved = CurvedAnimation(
-                    parent: animation1, curve: Curves.easeInOut);
+                    parent: animation1, curve: Curves.easeInOut,);
                 return FadeTransition(
                   opacity: curved,
                   child: child,
                 );
-              }),
+              },),
         );
       }
     } on http.ClientException catch (e) {
@@ -75,26 +77,29 @@ class _WaitingScreenState extends State<WaitingScreen>
       setState(() {
         status = 'Client error occurred, please try again later';
       });
-    } on TimeoutException catch (e) {
+    } on TimeoutException {
       setState(() {
         status = 'Request timed out, please try again later';
       });
-    } on UnauthorizedException catch (e) {
-      Navigator.push(
-        context,
-        MaterialPageRoute<DesktopLoginScreen>(
-          builder: (context) {
-            return Screen(
-              desktop: DesktopLoginScreen(),
-              mobile: MobileLoginScreen(),
-            );
-          },
-        ),
-      );
+    } on UnauthorizedException  {
+      if(mounted) {
+        await Navigator.push(
+            context,
+            MaterialPageRoute<DesktopLoginScreen>(
+              builder: (context) {
+                return Screen.build(
+                  context,
+                  desktopScreen: const DesktopLoginScreen(),
+                  mobileScreen: const MobileLoginScreen(),
+                );
+              },
+            ),
+        );
+      }
       //navigation_helper.redirectToLogin();
-    } on ServerException catch (e) {
+    } on ServerException {
       setState(() {
-        status = 'Server error, we appologize for this inconvenience';
+        status = 'Server error, we apologize for this inconvenience';
       });
     } on ManyRequestsException catch (e) {
       setState(() {
@@ -112,7 +117,7 @@ class _WaitingScreenState extends State<WaitingScreen>
       setState(() {
         status = e.message;
       });
-    } catch (e) {
+    } on Exception catch (e) {
       if (kDebugMode) {
         print(e);
       }
@@ -123,7 +128,25 @@ class _WaitingScreenState extends State<WaitingScreen>
       _controller?.reset();
       if (mounted) {
         setState(() {
-          _leading = const MaterialBackButton();
+          _leading = Center(
+            child: MaterialButton(
+              height: 48,
+              color: Colors.grey.shade200,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Back to Selection',
+                style:
+                GoogleFonts.roboto(
+                  textStyle: Style.buttonTextDesktop,
+                ),
+              ),
+            ),
+          );
         });
       }
     }
@@ -152,26 +175,26 @@ class _WaitingScreenState extends State<WaitingScreen>
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.sizeOf(context).height;
+    final height = MediaQuery.sizeOf(context).height;
     final orientation = MediaQuery.of(context).orientation;
-    double topBarheight;
+    double topbarHeight;
     if(height < 650) {
       if(orientation == Orientation.portrait) {
-        topBarheight = Style.topBarHeightPortrait;
+        topbarHeight = Style.topBarHeightPortrait;
       } else {
-        topBarheight = Style.topBarHeightLandscape;
+        topbarHeight = Style.topBarHeightLandscape;
       }
     }
     else if(height > 650 && height < 1200) {
-      topBarheight = Style.topBarHeightDesktop;
+      topbarHeight = Style.topBarHeightDesktop;
     }
     else {
-      topBarheight = Style.topBarOver1200;
+      topbarHeight = Style.topBarOver1200;
     }
     return SafeArea(
       child: Scaffold(
         appBar: TopBar(
-          height: topBarheight,
+          height: topbarHeight,
           leading: _leading,
           loggedIn: true,
         ),
@@ -179,7 +202,6 @@ class _WaitingScreenState extends State<WaitingScreen>
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 32,
-              vertical: 0,
             ),
             child: Opacity(
               opacity: _controller?.status == AnimationStatus.dismissed

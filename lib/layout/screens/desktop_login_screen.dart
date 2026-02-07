@@ -7,24 +7,27 @@ import 'package:comfortex_ai/layout/ui_components/common/top_bar.dart';
 import 'package:comfortex_ai/utils/auth_api_mobile.dart';
 import 'package:comfortex_ai/utils/auth_api_v2.dart';
 import 'package:comfortex_ai/utils/auth_api_web.dart';
+import 'package:comfortex_ai/utils/navigation_helper_stub.dart'
+    if (dart.library.html) 'package:comfortex_ai/utils/navigation_helper_web.dart'
+    as navigation_helper;
 import 'package:comfortex_ai/utils/style.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:comfortex_ai/utils/navigation_helper_stub.dart'
-    if (dart.library.html) 'package:comfortex_ai/utils/navigation_helper_web.dart'
-    as navigation_helper;
 import 'package:http/http.dart';
 
+/// The desktop version of Login Screen
 class DesktopLoginScreen extends StatefulWidget {
+  /// Default constructor
   const DesktopLoginScreen({super.key});
 
   @override
   State<DesktopLoginScreen> createState() => _DesktopLoginScreenState();
 }
 
-class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProviderStateMixin {
+class _DesktopLoginScreenState extends State<DesktopLoginScreen>
+    with TickerProviderStateMixin {
   String username = '';
   String password = '';
   String? message;
@@ -34,14 +37,14 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
   late AnimationController _controller;
   late AnimationController _controller2;
 
-  void submit() async {
+  Future<void> submit() async {
     setState(() {
-    _buttonEnabled = false;
-    message = '';
+      _buttonEnabled = false;
+      message = '';
     });
-    AuthApiv2 authApi;
-    if(kIsWeb) {
-    authApi = AuthApiWeb();
+    AuthApiV2 authApi;
+    if (kIsWeb) {
+      authApi = AuthApiWeb();
     } else {
       authApi = AuthApiMobile();
     }
@@ -62,9 +65,10 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
         final groups = await authApi.login(username, password);
         if (groups.contains('admin')) {
           try {
-            //For diversity i will keep this redirect.. It is implemented via different auth and a JSP interface..
-            return navigation_helper.redirectToAdminboard();
-          } catch (e) {
+            //For diversity i will keep this redirect.. It is implemented
+            // via different auth and a JSP interface..
+            return navigation_helper.redirectToAdminBoard();
+          } on Exception {
             setState(() {
               message = 'Admins login is done via web browsers';
             });
@@ -73,25 +77,37 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
           setState(() {
             _controller.forward().whenComplete(() {
               _controller2.forward().whenComplete(() {
-                _controller.reverse().whenComplete(() {_controller2.reverse();});});
+                _controller.reverse().whenComplete(() {
+                  _controller2.reverse();
+                });
+              });
             });
           });
-          await Future.delayed(const Duration(milliseconds: 2350), (){});
-          await Navigator.push(
-            context,
-            PageRouteBuilder(
-                transitionDuration: const Duration(seconds: 2,),
-                reverseTransitionDuration: const Duration(seconds: 2,),
+          await Future.delayed(const Duration(milliseconds: 2350), () {});
+          if (mounted) {
+            await Navigator.push(
+              context,
+              PageRouteBuilder<SelectAiScreen>(
+                transitionDuration: const Duration(
+                  seconds: 2,
+                ),
+                reverseTransitionDuration: const Duration(
+                  seconds: 2,
+                ),
                 pageBuilder: (_, __, ___) => SelectAiScreen(),
                 transitionsBuilder: (context, animation1, animation2, child) {
-                  final curved = CurvedAnimation(parent: animation1, curve: Curves.decelerate);
+                  final curved = CurvedAnimation(
+                    parent: animation1,
+                    curve: Curves.decelerate,
+                  );
                   return FadeTransition(
                     opacity: curved,
                     child: child,
                   );
-                }
-            ),
-          );
+                },
+              ),
+            );
+          }
         } else {
           if (kDebugMode) {
             print('Backend error');
@@ -101,8 +117,8 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
         setState(() {
           message = 'Invalid credentials';
         });
-        if(kDebugMode) {
-        print(e);
+        if (kDebugMode) {
+          print(e);
         }
       } on ManyRequestsException catch (e) {
         setState(() {
@@ -120,21 +136,20 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
         setState(() {
           message = "The request you've sent is not correct..";
         });
-      }
-      on Exception catch (e) {
-        if(kDebugMode)
-          {
-        print(e);
-          }
+      } on Exception catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
         setState(() {
-          message = 'Generic error, possible reasons:\n - Browser CORS issues \n'
+          message =
+              'Generic error, possible reasons:\n - Browser CORS issues \n'
               ' - Server under maintenance \n..\n'
               '--> we apologize for this inconvenience <--';
         });
       }
     }
     setState(() {
-    _buttonEnabled = true;
+      _buttonEnabled = true;
     });
   }
 
@@ -145,16 +160,16 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
       duration: const Duration(milliseconds: 800),
       vsync: this,
       upperBound: 64,
-    )..addListener((){setState(() {
-
-    });});
+    )..addListener(() {
+        setState(() {});
+      });
     _controller2 = AnimationController(
       duration: const Duration(milliseconds: 350),
       vsync: this,
       upperBound: 64,
-    )..addListener((){
-      setState(() {
-    });});
+    )..addListener(() {
+        setState(() {});
+      });
   }
 
   @override
@@ -296,12 +311,16 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> with TickerProv
                       height: 48,
                       minWidth: MediaQuery.sizeOf(context).width / 4,
                       splashColor: Colors.orange,
-                      color: _controller.value != 0 && _controller2.value == 0 ? Colors.purpleAccent :
-                      _controller.value != 0 && _controller2.value != 0 ?
-                        Colors.greenAccent : _controller.value == 0 && _controller2.value != 0 ? Colors.green :
-                      Colors.blueAccent,
+                      color: _controller.value != 0 && _controller2.value == 0
+                          ? Colors.purpleAccent
+                          : _controller.value != 0 && _controller2.value != 0
+                              ? Colors.greenAccent
+                              : _controller.value == 0 &&
+                                      _controller2.value != 0
+                                  ? Colors.green
+                                  : Colors.blueAccent,
                       hoverColor: Colors.black,
-                      onPressed: _buttonEnabled ? submit: (){},
+                      onPressed: _buttonEnabled ? submit : () {},
                       shape: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(

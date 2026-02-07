@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:comfortex_ai/layout/ui_components/common/img_container.dart';
 import 'package:comfortex_ai/layout/ui_components/common/page_builder.dart';
 import 'package:comfortex_ai/layout/ui_components/common/title_widget.dart';
@@ -15,10 +13,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 ///MobileScreen1 displays the Mobile version screen1.
 class MobileScreen1 extends StatefulWidget {
-  PropertiesV2 properties;
-
   ///Constructor for MobileScreen1
-  MobileScreen1(this.properties, {super.key});
+  const MobileScreen1(this.properties, {super.key});
+
+  /// Fresh properties object
+  final PropertiesV2 properties;
 
   @override
   State<MobileScreen1> createState() => _MobileScreen1State();
@@ -28,12 +27,12 @@ class _MobileScreen1State extends State<MobileScreen1>
     with TickerProviderStateMixin {
   late PropertiesV2 properties = widget.properties;
   static const String _title = 'Garment Type';
-  static const String _ChooseOne = 'Choose one of these';
+  static const String _chooseOne = 'Choose one of these';
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;
   late AnimationController _controller2;
   late Animation<Color?> _colorAnimation2;
-  bool _showhint = false;
+  bool _showHint = false;
   double _a = 0;
 
   ///A method to change ShirtType and update the screen.
@@ -86,14 +85,14 @@ class _MobileScreen1State extends State<MobileScreen1>
       Timer(const Duration(milliseconds: 5000), () {
         if (mounted) {
           setState(() {
-            _showhint = true;
+            _showHint = true;
             _a = 0.3;
           });
         }
         Timer(const Duration(seconds: 3), () {
           if (mounted) {
             setState(() {
-              _showhint = false;
+              _showHint = false;
               _a = 0.1;
             });
           }
@@ -119,10 +118,12 @@ class _MobileScreen1State extends State<MobileScreen1>
             return Scaffold(
               appBar: TopBar(
                 height: Style.topBarHeightPortrait,
-                loggedIn: true,options: true,),
+                loggedIn: true,
+                options: true,
+              ),
               body: Column(
                 children: <Widget>[
-                  Spacer(),
+                  const Spacer(),
                   Expanded(
                     flex: 6,
                     child: Stack(
@@ -146,7 +147,7 @@ class _MobileScreen1State extends State<MobileScreen1>
                                 flex: 3,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 72),
+                                      horizontal: 72,),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -186,7 +187,7 @@ class _MobileScreen1State extends State<MobileScreen1>
                                 ),
                               ),
                               Text(
-                                _ChooseOne,
+                                _chooseOne,
                                 style: GoogleFonts.roboto(
                                   textStyle: Style.captionTextMobile,
                                 ),
@@ -196,14 +197,15 @@ class _MobileScreen1State extends State<MobileScreen1>
                         ),
                         AnimatedRotation(
                           turns: _a,
-                          duration: Duration(milliseconds: 900),
+                          duration: const Duration(milliseconds: 900),
                           child: AnimatedOpacity(
                             duration: const Duration(milliseconds: 1300),
-                            opacity: _showhint ? 1.0 : 0.0,
+                            opacity: _showHint ? 1.0 : 0.0,
                             child: const Center(
                               child: Icon(
+                                // A great built-in icon for this
                                 Icons
-                                    .touch_app_outlined, // A great built-in icon for this
+                                    .touch_app_outlined,
                                 color: Colors.red,
                                 size: 50,
                               ),
@@ -248,7 +250,7 @@ class _MobileScreen1State extends State<MobileScreen1>
                               ),
                             ),
                             Text(
-                              _ChooseOne,
+                              _chooseOne,
                               style: GoogleFonts.roboto(
                                 textStyle: Style.captionTextMobile,
                               ),
@@ -273,8 +275,10 @@ class _MobileScreen1State extends State<MobileScreen1>
             );
           } else {
             return Scaffold(
-              appBar: TopBar(loggedIn: true, options: true,
-              height: Style.topBarHeightLandscape,
+              appBar: TopBar(
+                loggedIn: true,
+                options: true,
+                height: Style.topBarHeightLandscape,
               ), //MediaQuery.sizeOf(context).height * 0.15
               body: Padding(
                 padding: const EdgeInsets.all(12),
@@ -340,7 +344,7 @@ class _MobileScreen1State extends State<MobileScreen1>
                                   ),
                                 ),
                                 Text(
-                                  _ChooseOne,
+                                  _chooseOne,
                                   style: GoogleFonts.roboto(
                                     textStyle: Style.captionTextMobile,
                                   ),
@@ -354,7 +358,7 @@ class _MobileScreen1State extends State<MobileScreen1>
                     ).animate(key: ValueKey(orientation)).flipH(
                           duration: const Duration(milliseconds: 800),
                         ),
-                    Gap(6),
+                    const Gap(6),
                     if (properties.shirtType != null)
                       Expanded(
                         flex: 5,
@@ -380,7 +384,8 @@ class _MobileScreen1State extends State<MobileScreen1>
                               Flexible(
                                 flex: 6,
                                 child: PageBuilder(
-                                  //TODO: Should we add a stream and listen to it and push the screen based on that ?
+                                  // To-do: Should we add a stream and listen to
+                                  // it and push the screen based on that ?
                                   properties, setDescription,
                                   key: ValueKey(
                                     properties.shirtType!,
@@ -389,7 +394,7 @@ class _MobileScreen1State extends State<MobileScreen1>
                                 ),
                               ),
                               Text(
-                                _ChooseOne,
+                                _chooseOne,
                                 style: GoogleFonts.roboto(
                                   textStyle: Style.captionTextMobile,
                                 ),
@@ -413,16 +418,17 @@ class _MobileScreen1State extends State<MobileScreen1>
     );
   }
 
-  Container buildContainerAnimated(dynamic? prop, Widget c) {
+  Container buildContainerAnimated(dynamic prop, Widget c) {
     return Container(
         decoration: BoxDecoration(
-            color: prop is ShirtType ? _colorAnimation.value : _colorAnimation2.value,
+            color: prop is ShirtType
+                ? _colorAnimation.value
+                : _colorAnimation2.value,
             borderRadius: BorderRadius.circular(32),
             boxShadow: [
               BoxShadow(
                 blurRadius: prop == null ? 0 : 12,
-              )
-            ]),
-        child: c);
+              ),],),
+        child: c,);
   }
 }

@@ -7,7 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
 
-class AuthApiWeb extends AuthApiv2 {
+/// web version of [AuthApiV2]
+class AuthApiWeb extends AuthApiV2 {
 
   @override
   Future<List<String>> login(String username, String password) async {
@@ -18,11 +19,11 @@ class AuthApiWeb extends AuthApiv2 {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'username': username, 'password': password}),
     ).timeout(const Duration(seconds: 15));
-    AuthApiv2.statusCodeParser(response);
+    AuthApiV2.statusCodeParser(response);
     final data = jsonDecode(response.body) as Map<String?, dynamic>;
     final jwtToken = data['jwtToken'] as String?;
     if(jwtToken == null) {
-      throw ServerException('We didn\'t receive a login token from the server');
+      throw ServerException("We didn't receive a login token from the server");
     }
     final result = groupsFrom(jwtToken);
     //We don't want to write to storage if it is an admin for now..
@@ -35,7 +36,7 @@ class AuthApiWeb extends AuthApiv2 {
         key: 'jwtToken',
         value: jwtToken,
       );
-    } catch (e, st) {
+    } on Exception {
       if (kDebugMode) {
         print('ERROR _storage.write method (because its an http web)');
       }
@@ -57,7 +58,7 @@ class AuthApiWeb extends AuthApiv2 {
           }
           await refresh();
           return true;
-        } on UnauthorizedException catch (e) {
+        } on UnauthorizedException {
           //Other exceptions should propagate
           return false;
         }
@@ -77,7 +78,7 @@ class AuthApiWeb extends AuthApiv2 {
     if (kDebugMode) {
       print(response.statusCode);
     }
-    AuthApiv2.statusCodeParser(
+    AuthApiV2.statusCodeParser(
       response,
     );
     final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -102,15 +103,15 @@ class AuthApiWeb extends AuthApiv2 {
       uri,
       headers: {'Content-Type': 'application/json'},
     );
-    AuthApiv2.statusCodeParser(response);
+    AuthApiV2.statusCodeParser(response);
   }
 
   ///The web version of getUrl should enable building relative and absolute url
   @override
   Uri getUrl(String expansion) {
     if (url.isEmpty) {
-      Uri uri = Uri.parse(expansion);
-      Uri result = uri.replace(scheme: super.prefix);
+      final uri = Uri.parse(expansion);
+      final result = uri.replace(scheme: super.prefix);
       return result;
     }
     return Uri.parse(url + expansion);
